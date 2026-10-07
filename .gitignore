@@ -1,0 +1,36 @@
+﻿# Maven
+target/
+*.class
+
+# Logs
+*.log
+
+# VS Code
+.vscode/
+
+# IntelliJ
+.idea/
+*.iml
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Environment / secrets
+.env
+*.env
+application-local.properties
+application-secret.properties
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test output
+test-output/
+screenshots/
+
+# Temporary
+*.tmp
+*.temp

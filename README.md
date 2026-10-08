@@ -93,3 +93,5 @@ Roll Number: 23102C0045
 Institute: Vidyalankar Institute of Technology
 
 Department: Computer Engineering
+
+Development branch: MVP integration update.

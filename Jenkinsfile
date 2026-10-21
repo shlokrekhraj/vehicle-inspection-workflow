@@ -1,4 +1,4 @@
-﻿pipeline {
+pipeline {
     agent any
 
     tools {
@@ -14,7 +14,7 @@
     stages {
         stage('Checkout') {
             steps {
-                echo 'Pipeline source checked out by Jenkins.'
+                echo 'Source code checked out from GitHub.'
             }
         }
 
@@ -36,10 +36,10 @@
 
     post {
         success {
-            echo 'CI pipeline completed successfully.'
+            echo 'CI Pipeline completed successfully.'
         }
         failure {
-            echo 'CI pipeline failed. Check the console output.'
+            echo 'CI Pipeline failed. Check the console output.'
         }
     }
 }

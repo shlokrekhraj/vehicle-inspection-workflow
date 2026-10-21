@@ -1,37 +1,45 @@
 ﻿pipeline {
-
     agent any
 
-    stages {
+    tools {
+        jdk 'JDK-17'
+        maven 'Maven-3.10.0'
+    }
 
+    options {
+        timestamps()
+        disableConcurrentBuilds()
+    }
+
+    stages {
         stage('Checkout') {
             steps {
-                echo 'Checking out source code'
+                echo 'Pipeline source checked out by Jenkins.'
             }
         }
 
-        stage('Build') {
+        stage('Build and Test') {
             steps {
-                echo 'Maven build will be configured in Step 7'
+                bat 'mvn -B clean package'
             }
         }
 
-        stage('Test') {
+        stage('Archive Artifact') {
             steps {
-                echo 'Automated testing will be configured later'
+                archiveArtifacts(
+                    artifacts: 'target/vehicle-inspection-workflow-0.0.1-SNAPSHOT.jar',
+                    fingerprint: true
+                )
             }
         }
+    }
 
-        stage('Docker') {
-            steps {
-                echo 'Docker pipeline will be configured later'
-            }
+    post {
+        success {
+            echo 'CI pipeline completed successfully.'
         }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deployment will be configured later'
-            }
+        failure {
+            echo 'CI pipeline failed. Check the console output.'
         }
     }
 }

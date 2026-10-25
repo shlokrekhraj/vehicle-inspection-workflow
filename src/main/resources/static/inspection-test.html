@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Inspection Test Page</title>
+</head>
+<body>
+    <h1>Vehicle Inspection Request</h1>
+
+    <form id="inspectionForm">
+        <label for="vehicleNumber">Vehicle Number</label>
+        <input id="vehicleNumber" name="vehicleNumber" required
+               value="MH02AB1234">
+
+        <br><br>
+
+        <label for="vehicleType">Vehicle Type</label>
+        <input id="vehicleType" name="vehicleType" required value="Car">
+
+        <br><br>
+
+        <label for="ownerName">Owner Name</label>
+        <input id="ownerName" name="ownerName" required
+               value="Selenium Test User">
+
+        <br><br>
+
+        <label for="documentName">Document Name</label>
+        <input id="documentName" name="documentName" required
+               value="Registration Certificate">
+
+        <br><br>
+
+        <button type="submit" id="submitButton">Submit Inspection</button>
+    </form>
+
+    <h2>Response</h2>
+    <pre id="result">Waiting for submission...</pre>
+
+    <script>
+        document.getElementById("inspectionForm").addEventListener(
+            "submit", async function (event) {
+                event.preventDefault();
+
+                const request = {
+                    vehicleNumber: document.getElementById("vehicleNumber").value,
+                    vehicleType: document.getElementById("vehicleType").value,
+                    ownerName: document.getElementById("ownerName").value,
+                    documentName: document.getElementById("documentName").value
+                };
+
+                const result = document.getElementById("result");
+                result.textContent = "Submitting...";
+
+                try {
+                    const response = await fetch(
+                        "http://localhost:8080/api/inspection-requests",
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(request)
+                        }
+                    );
+
+                    const body = await response.text();
+                    result.textContent =
+                        "HTTP Status: " + response.status + "\n" + body;
+                } catch (error) {
+                    result.textContent = "Request failed: " + error.message;
+                }
+            }
+        );
+    </script>
+</body>
+</html>

@@ -11,25 +11,22 @@
 
     <form id="inspectionForm">
         <label for="vehicleNumber">Vehicle Number</label>
-        <input id="vehicleNumber" name="vehicleNumber" required
-               value="MH02AB1234">
+        <input id="vehicleNumber" name="vehicleNumber" required>
 
         <br><br>
 
         <label for="vehicleType">Vehicle Type</label>
-        <input id="vehicleType" name="vehicleType" required value="Car">
+        <input id="vehicleType" name="vehicleType" required>
 
         <br><br>
 
         <label for="ownerName">Owner Name</label>
-        <input id="ownerName" name="ownerName" required
-               value="Selenium Test User">
+        <input id="ownerName" name="ownerName" required>
 
         <br><br>
 
         <label for="documentName">Document Name</label>
-        <input id="documentName" name="documentName" required
-               value="Registration Certificate">
+        <input id="documentName" name="documentName" required>
 
         <br><br>
 
@@ -56,7 +53,7 @@
 
                 try {
                     const response = await fetch(
-                        "http://localhost:8080/api/inspection-requests",
+                        "/api/inspection-requests",
                         {
                             method: "POST",
                             headers: {

@@ -1,6 +1,10 @@
 package com.vehicleinspection.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
@@ -10,12 +14,19 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "is required")
     @Column(nullable = false)
     private String name;
 
+    @NotBlank(message = "is required")
+    @Email(message = "must be a valid email address")
     @Column(nullable = false, unique = true)
     private String email;
 
+    /** Stored as a BCrypt hash; never written back out in JSON responses. */
+    @NotBlank(message = "is required")
+    @Size(min = 6, message = "must be at least 6 characters")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false)
     private String password;
 

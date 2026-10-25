@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vehicle Inspection - Submit Request</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header><strong>Vehicle Inspection Workflow</strong><a href="index.html">Account</a><a href="apply.html">Submit Request</a><a href="reviewer.html">Reviewer Dashboard</a><a href="status.html">Track Status</a></header>
+<main>
+  <section class="card">
+    <h1>Submit an inspection request</h1>
+    <form id="requestForm" novalidate>
+      <label for="vehicleNumber">Vehicle number</label><input id="vehicleNumber" placeholder="MH02AB1234">
+      <label for="vehicleType">Vehicle type</label>
+      <select id="vehicleType">
+        <option value="">-- choose --</option><option>Car</option><option>Bike</option><option>Scooter</option>
+        <option>Truck</option><option>Bus</option><option>Auto</option><option>Van</option>
+      </select>
+      <label for="ownerName">Owner name</label><input id="ownerName">
+      <label for="documentName">Document (e.g. Registration Certificate)</label><input id="documentName">
+      <button type="submit" id="submitButton">Submit request</button>
+    </form>
+    <div id="submitMessage" class="msg"></div>
+  </section>
+</main>
+<script src="app.js"></script>
+<script>
+document.getElementById("requestForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  try {
+    const saved = await api("POST", "/api/inspection-requests", {
+      vehicleNumber: vehicleNumber.value, vehicleType: vehicleType.value,
+      ownerName: ownerName.value, documentName: documentName.value });
+    showMessage("submitMessage", "Request ID " + saved.id + " for " + saved.vehicleNumber + " is " + saved.status, true);
+    document.getElementById("submitMessage").dataset.requestId = saved.id;
+  } catch (err) { showMessage("submitMessage", err.message, false); }
+});
+</script>
+</body>
+</html>

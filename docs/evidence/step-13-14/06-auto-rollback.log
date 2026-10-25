@@ -1,0 +1,140 @@
+> docker compose -f ansible/docker-compose.yml run --rm -T -e ANSIBLE_FORCE_COLOR=0 ansible ansible-playbook playbooks/deploy.yml -e simulate_bad_release=true
+
+ Container ansible-ansible-run-9e8b73073e51 Creating 
+ Container ansible-ansible-run-9e8b73073e51 Created 
+
+PLAY [Deploy the application (automatic rollback on failed health check)] ******
+
+TASK [app : Work out release paths] ********************************************
+ok: [vi-node1]
+
+TASK [app : Read the currently deployed release] *******************************
+ok: [vi-node1]
+
+TASK [app : Remember which release was live before this run] *******************
+ok: [vi-node1]
+
+TASK [app : Create release folder 1.3.4-broken] ********************************
+changed: [vi-node1]
+
+TASK [app : Copy a deliberately corrupt jar (rollback demonstration)] **********
+changed: [vi-node1]
+
+TASK [app : Record the previous release for rollback] **************************
+changed: [vi-node1]
+
+TASK [app : Point 'current' at the new release] ********************************
+changed: [vi-node1]
+
+TASK [app : Restart the application for the new release] ***********************
+changed: [vi-node1]
+
+TASK [app : Ensure the application is running] *********************************
+changed: [vi-node1]
+
+TASK [Health check new release] ************************************************
+included: verify for vi-node1
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (40 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (39 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (38 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (37 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (36 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (35 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (34 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (33 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (32 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (31 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (30 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (29 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (28 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (27 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (26 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (25 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (24 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (23 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (22 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (21 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (20 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (19 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (18 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (17 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (16 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (15 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (14 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (13 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (12 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (11 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (10 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (9 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (8 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (7 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (6 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (5 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (4 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (3 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (2 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (1 retries left).
+
+TASK [verify : Wait for /actuator/health through Nginx to report UP] ***********
+fatal: [vi-node1]: FAILED! => 
+    attempts: 40
+    changed: false
+    connection: close
+    content: |-
+        <html>
+        <head><title>502 Bad Gateway</title></head>
+        <body>
+        <center><h1>502 Bad Gateway</h1></center>
+        <hr><center>nginx/1.18.0 (Ubuntu)</center>
+        </body>
+        </html>
+    content_length: '166'
+    content_type: text/html
+    date: Sun, 25 Oct 2026 10:09:19 GMT
+    elapsed: 0
+    msg: 'Status code was 502 and not [200]: HTTP Error 502: Bad Gateway'
+    redirected: false
+    server: nginx/1.18.0 (Ubuntu)
+    status: 502
+    url: http://127.0.0.1/actuator/health
+
+TASK [app : Report failed release] *********************************************
+ok: [vi-node1] => 
+    msg: Release 1.3.4-broken FAILED its health check - rolling back to /opt/vehicle-inspection/releases/1.3.4
+
+TASK [app : Point 'current' back at the last good release] *********************
+changed: [vi-node1]
+
+TASK [app : Restart the application on the last good release] ******************
+changed: [vi-node1]
+
+TASK [Health check after rollback] *********************************************
+included: verify for vi-node1
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (40 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (39 retries left).
+
+TASK [verify : Wait for /actuator/health through Nginx to report UP] ***********
+ok: [vi-node1]
+
+TASK [verify : Read deployed version] ******************************************
+ok: [vi-node1]
+
+TASK [verify : Health check result] ********************************************
+ok: [vi-node1] => 
+    msg:
+    - 'Node:      vi-node1'
+    - 'Release:   1.3.4'
+    - 'Health:    UP'
+    - 'Database:  UP'
+    - 'URL on PC: http://localhost:8095/'
+
+TASK [app : Remove the failed release] *****************************************
+changed: [vi-node1]
+
+TASK [app : Rollback summary] **************************************************
+ok: [vi-node1] => 
+    msg: ROLLBACK COMPLETE - 1.3.4 is serving traffic again; 1.3.4-broken was removed.
+
+PLAY RECAP *********************************************************************
+vi-node1                   : ok=19   changed=9    unreachable=0    failed=0    skipped=2    rescued=1    ignored=0   
+

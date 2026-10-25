@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vehicle Inspection - Track Status</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header><strong>Vehicle Inspection Workflow</strong><a href="index.html">Account</a><a href="apply.html">Submit Request</a><a href="reviewer.html">Reviewer Dashboard</a><a href="status.html">Track Status</a></header>
+<main>
+  <section class="card">
+    <h1>Track your request</h1>
+    <form id="statusForm">
+      <label for="requestId">Request ID</label><input id="requestId" type="number" min="1" required>
+      <button type="submit" id="trackButton">Check status</button>
+    </form>
+    <div id="statusMessage" class="msg"></div>
+  </section>
+</main>
+<script src="app.js"></script>
+<script>
+document.getElementById("statusForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  try {
+    const r = await api("GET", "/api/inspection-requests/" + requestId.value + "/status");
+    showMessage("statusMessage", "Request " + r.id + " (" + r.vehicleNumber + "): " + r.status +
+      (r.remarks ? "\nRemarks: " + r.remarks : ""), true);
+  } catch (err) { showMessage("statusMessage", err.message, false); }
+});
+</script>
+</body>
+</html>

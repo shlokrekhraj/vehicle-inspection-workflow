@@ -1,0 +1,57 @@
+# Server prerequisites: packages, users, folders, files and the app service.
+- name: Install required packages
+  ansible.builtin.apt:
+    name: "{{ node_packages }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 86400
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+- name: Create application group
+  ansible.builtin.group:
+    name: "{{ app_group }}"
+    system: true
+
+- name: Create application user (no login shell)
+  ansible.builtin.user:
+    name: "{{ app_user }}"
+    group: "{{ app_group }}"
+    system: true
+    shell: /usr/sbin/nologin
+    home: "{{ app_home }}"
+    create_home: false
+
+- name: Create application folders
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ app_group }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - { path: "{{ app_home }}", owner: root, mode: "0755" }
+    - { path: "{{ app_home }}/releases", owner: root, mode: "0755" }
+    - { path: "{{ app_home }}/logs", owner: "{{ app_user }}", mode: "0750" }
+    - { path: "{{ app_conf_dir }}", owner: root, mode: "0750" }
+
+- name: Write application environment file
+  ansible.builtin.template:
+    src: app.env.j2
+    dest: "{{ app_conf_dir }}/app.env"
+    owner: root
+    group: "{{ app_group }}"
+    mode: "0640"
+  notify: restart vehicle-inspection
+
+- name: Install the application service script
+  ansible.builtin.template:
+    src: vehicle-inspection.init.j2
+    dest: /etc/init.d/{{ app_name }}
+    mode: "0755"
+  notify: restart vehicle-inspection
+
+- name: Enable the application service at boot
+  ansible.builtin.sysvinit:
+    name: "{{ app_name }}"
+    enabled: true

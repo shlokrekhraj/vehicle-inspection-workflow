@@ -1,0 +1,53 @@
+# Local full stack: MySQL + app + Nginx
+#   mvn -B package -DskipTests
+#   $env:DB_PASSWORD="choose-a-password"; docker compose up -d --build
+#   open http://localhost:8088
+name: vehicle-inspection
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: vi-compose-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD first}
+      MYSQL_DATABASE: vehicle_inspection_db
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${DB_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  app:
+    build:
+      context: .
+      args:
+        APP_VERSION: ${APP_VERSION:-compose}
+    image: vehicle-inspection-workflow:${APP_VERSION:-compose}
+    container_name: vi-compose-app
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/vehicle_inspection_db?createDatabaseIfNotExist=true
+      DB_USERNAME: root
+      DB_PASSWORD: ${DB_PASSWORD}
+      APP_ENV: compose
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8090:8080"
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: vi-compose-nginx
+    environment:
+      APP_UPSTREAM: app:8080
+    volumes:
+      - ./deploy/nginx/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+    depends_on:
+      - app
+    ports:
+      - "8088:80"
+
+volumes:
+  mysql-data:

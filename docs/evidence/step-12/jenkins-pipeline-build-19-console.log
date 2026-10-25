@@ -1,0 +1,710 @@
+Started by an SCM change
+Obtained Jenkinsfile from git https://github.com/shlokrekhraj/vehicle-inspection-workflow.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Still waiting to schedule task
+Waiting for next available executor
+Running on Jenkins in C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git.exe rev-parse --resolve-git-dir C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline\.git # timeout=10
+Fetching changes from the remote Git repository
+ > git.exe config remote.origin.url https://github.com/shlokrekhraj/vehicle-inspection-workflow.git # timeout=10
+Fetching upstream changes from https://github.com/shlokrekhraj/vehicle-inspection-workflow.git
+ > git.exe --version # timeout=10
+ > git --version # 'git version 2.53.0.windows.2'
+ > git.exe fetch --tags --force --progress -- https://github.com/shlokrekhraj/vehicle-inspection-workflow.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git.exe rev-parse "refs/remotes/origin/develop^{commit}" # timeout=10
+Checking out Revision 243e5ae02c83923f1e7cda24745bbf2f2c174633 (refs/remotes/origin/develop)
+ > git.exe config core.sparsecheckout # timeout=10
+ > git.exe checkout -f 243e5ae02c83923f1e7cda24745bbf2f2c174633 # timeout=10
+Commit message: "ci: always remove the test container; print health JSON as text in lifecycle log"
+ > git.exe rev-list --no-walk 87f052b50594b520ed620829fecd2a4acfd2393a # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] timestamps
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Tool Install)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] checkout
+[2026-10-25T10:08:41.261Z] Selected Git installation does not exist. Using Default
+[2026-10-25T10:08:41.262Z] The recommended git tool is: NONE
+[2026-10-25T10:08:41.262Z] No credentials specified
+[2026-10-25T10:08:41.262Z]  > git.exe rev-parse --resolve-git-dir C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline\.git # timeout=10
+[2026-10-25T10:08:41.358Z] Fetching changes from the remote Git repository
+[2026-10-25T10:08:41.366Z]  > git.exe config remote.origin.url https://github.com/shlokrekhraj/vehicle-inspection-workflow.git # timeout=10
+[2026-10-25T10:08:41.454Z] Fetching upstream changes from https://github.com/shlokrekhraj/vehicle-inspection-workflow.git
+[2026-10-25T10:08:41.454Z]  > git.exe --version # timeout=10
+[2026-10-25T10:08:41.546Z]  > git --version # 'git version 2.53.0.windows.2'
+[2026-10-25T10:08:41.546Z]  > git.exe fetch --tags --force --progress -- https://github.com/shlokrekhraj/vehicle-inspection-workflow.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+[2026-10-25T10:08:42.446Z]  > git.exe rev-parse "refs/remotes/origin/develop^{commit}" # timeout=10
+[2026-10-25T10:08:42.540Z] Checking out Revision 243e5ae02c83923f1e7cda24745bbf2f2c174633 (refs/remotes/origin/develop)
+[2026-10-25T10:08:42.540Z]  > git.exe config core.sparsecheckout # timeout=10
+[2026-10-25T10:08:42.625Z]  > git.exe checkout -f 243e5ae02c83923f1e7cda24745bbf2f2c174633 # timeout=10
+[2026-10-25T10:08:42.733Z] Commit message: "ci: always remove the test container; print health JSON as text in lifecycle log"
+[Pipeline] bat
+[2026-10-25T10:08:43.081Z] 
+[2026-10-25T10:08:43.081Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline>java -version   && mvn -v   && docker version 
+[2026-10-25T10:08:43.081Z] openjdk version "17.0.20.1" 2026-08-18
+[2026-10-25T10:08:43.081Z] OpenJDK Runtime Environment Temurin-17.0.20.1+1 (build 17.0.20.1+1)
+[2026-10-25T10:08:43.081Z] OpenJDK 64-Bit Server VM Temurin-17.0.20.1+1 (build 17.0.20.1+1, mixed mode, sharing)
+[2026-10-25T10:08:43.655Z] Apache Maven 3.10.0 (c43a36b8d67be7e0805a411bc0898af1a51f5472)
+[2026-10-25T10:08:43.655Z] Maven home: C:\ProgramData\Jenkins\.jenkins\tools\hudson.tasks.Maven_MavenInstallation\Maven-3.10.0
+[2026-10-25T10:08:43.655Z] Java version: 17.0.20.1, vendor: Eclipse Adoptium, runtime: C:\Program Files\Eclipse Adoptium\jdk-17.0.20.101-hotspot
+[2026-10-25T10:08:43.655Z] Default locale: en_US, platform encoding: Cp1252, time zone: Asia/Calcutta
+[2026-10-25T10:08:43.655Z] OS name: "windows 11", version: "10.0", arch: "amd64", family: "windows"
+[2026-10-25T10:08:43.921Z] Client:
+[2026-10-25T10:08:43.921Z]  Version:           29.7.2
+[2026-10-25T10:08:43.921Z]  API version:       1.55
+[2026-10-25T10:08:43.921Z]  Go version:        go1.26.5
+[2026-10-25T10:08:43.921Z]  Git commit:        a7dcaa6
+[2026-10-25T10:08:43.921Z]  Built:             Wed Aug  5 18:31:33 2026
+[2026-10-25T10:08:43.921Z]  OS/Arch:           windows/amd64
+[2026-10-25T10:08:43.921Z]  Context:           desktop-linux
+[2026-10-25T10:08:43.921Z] 
+[2026-10-25T10:08:43.921Z] Server: Docker Desktop 4.90.0 (238679)
+[2026-10-25T10:08:43.921Z]  Engine:
+[2026-10-25T10:08:43.921Z]   Version:          29.7.2
+[2026-10-25T10:08:43.921Z]   API version:      1.55 (minimum version 1.40)
+[2026-10-25T10:08:43.921Z]   Go version:       go1.26.5
+[2026-10-25T10:08:43.921Z]   Git commit:       6a43e3d
+[2026-10-25T10:08:43.921Z]   Built:            Wed Aug  5 18:28:36 2026
+[2026-10-25T10:08:43.921Z]   OS/Arch:          linux/amd64
+[2026-10-25T10:08:43.921Z]   Experimental:     false
+[2026-10-25T10:08:43.921Z]  containerd:
+[2026-10-25T10:08:43.921Z]   Version:          v2.3.3
+[2026-10-25T10:08:43.921Z]   GitCommit:        aad11006b869517fcd3009450b6f82da282e1a9b
+[2026-10-25T10:08:43.921Z]  runc:
+[2026-10-25T10:08:43.921Z]   Version:          1.4.3
+[2026-10-25T10:08:43.921Z]   GitCommit:        v1.4.3-0-gbb14dabe
+[2026-10-25T10:08:43.921Z]  docker-init:
+[2026-10-25T10:08:43.921Z]   Version:          0.19.0
+[2026-10-25T10:08:43.921Z]   GitCommit:        de40ad0
+[Pipeline] script
+[Pipeline] {
+[Pipeline] bat
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] echo
+[2026-10-25T10:08:44.559Z] Building 1.2.19 from commit 243e5ae
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build & Unit Test)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] bat
+[2026-10-25T10:08:45.593Z] 
+[2026-10-25T10:08:45.593Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline>mvn -B clean test 
+[2026-10-25T10:08:47.501Z] [INFO] Scanning for projects...
+[2026-10-25T10:08:47.501Z] [INFO] Loaded 24234 auto-discovered prefixes for remote repository central (prefixes-central.txt)
+[2026-10-25T10:08:47.753Z] [INFO] 
+[2026-10-25T10:08:47.753Z] [INFO] ---------< com.vehicleinspection:vehicle-inspection-workflow >----------
+[2026-10-25T10:08:47.753Z] [INFO] Building vehicle-inspection-workflow 0.0.1-SNAPSHOT
+[2026-10-25T10:08:47.753Z] [INFO]   from pom.xml
+[2026-10-25T10:08:47.753Z] [INFO] --------------------------------[ jar ]---------------------------------
+[2026-10-25T10:08:47.753Z] [INFO] Loaded 74 auto-discovered prefixes for remote repository apache.snapshots (prefixes-apache.snapshots.txt)
+[2026-10-25T10:08:53.124Z] [INFO] 
+[2026-10-25T10:08:53.124Z] [INFO] --- clean:3.4.1:clean (default-clean) @ vehicle-inspection-workflow ---
+[2026-10-25T10:08:53.124Z] [INFO] Deleting C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline\target
+[2026-10-25T10:08:53.124Z] [INFO] 
+[2026-10-25T10:08:53.124Z] [INFO] --- resources:3.3.1:resources (default-resources) @ vehicle-inspection-workflow ---
+[2026-10-25T10:08:53.124Z] [INFO] Copying 1 resource from src\main\resources to target\classes
+[2026-10-25T10:08:53.124Z] [INFO] Copying 7 resources from src\main\resources to target\classes
+[2026-10-25T10:08:53.124Z] [INFO] 
+[2026-10-25T10:08:53.124Z] [INFO] --- compiler:3.14.0:compile (default-compile) @ vehicle-inspection-workflow ---
+[2026-10-25T10:08:53.388Z] [INFO] Recompiling the module because of changed source code.
+[2026-10-25T10:08:53.389Z] [INFO] Compiling 20 source files with javac [debug parameters release 17] to target\classes
+[2026-10-25T10:08:56.690Z] [INFO] 
+[2026-10-25T10:08:56.690Z] [INFO] --- resources:3.3.1:testResources (default-testResources) @ vehicle-inspection-workflow ---
+[2026-10-25T10:08:56.690Z] [INFO] Copying 1 resource from src\test\resources to target\test-classes
+[2026-10-25T10:08:56.690Z] [INFO] 
+[2026-10-25T10:08:56.690Z] [INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ vehicle-inspection-workflow ---
+[2026-10-25T10:08:56.690Z] [INFO] Recompiling the module because of changed dependency.
+[2026-10-25T10:08:56.690Z] [INFO] Compiling 6 source files with javac [debug parameters release 17] to target\test-classes
+[2026-10-25T10:09:00.023Z] [INFO] 
+[2026-10-25T10:09:00.023Z] [INFO] --- surefire:3.5.4:test (default-test) @ vehicle-inspection-workflow ---
+[2026-10-25T10:09:00.023Z] [INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[2026-10-25T10:09:00.023Z] [INFO] 
+[2026-10-25T10:09:00.023Z] [INFO] -------------------------------------------------------
+[2026-10-25T10:09:00.023Z] [INFO]  T E S T S
+[2026-10-25T10:09:00.023Z] [INFO] -------------------------------------------------------
+[2026-10-25T10:09:01.944Z] [INFO] Running com.vehicleinspection.api.InspectionWorkflowApiTest
+[2026-10-25T10:09:01.944Z] 15:39:01.667 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.vehicleinspection.api.InspectionWorkflowApiTest]: InspectionWorkflowApiTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+[2026-10-25T10:09:01.944Z] 15:39:01.815 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.vehicleinspection.VehicleInspectionApplication for test class com.vehicleinspection.api.InspectionWorkflowApiTest
+[2026-10-25T10:09:02.525Z] 
+[2026-10-25T10:09:02.525Z]   .   ____          _            __ _ _
+[2026-10-25T10:09:02.525Z]  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+[2026-10-25T10:09:02.525Z] ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+[2026-10-25T10:09:02.525Z]  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+[2026-10-25T10:09:02.525Z]   '  |____| .__|_| |_|_| |_\__, | / / / /
+[2026-10-25T10:09:02.525Z]  =========|_|==============|___/=/_/_/_/
+[2026-10-25T10:09:02.525Z] 
+[2026-10-25T10:09:02.525Z]  :: Spring Boot ::                (v3.5.6)
+[2026-10-25T10:09:02.525Z] 
+[2026-10-25T10:09:02.525Z] 2026-10-25T15:39:02.324+05:30  INFO 49336 --- [           main] c.v.api.InspectionWorkflowApiTest        : Starting InspectionWorkflowApiTest using Java 17.0.20.1 with PID 49336 (started by LAPTOP-JKNVGFLH$ in C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline)
+[2026-10-25T10:09:02.525Z] 2026-10-25T15:39:02.326+05:30  INFO 49336 --- [           main] c.v.api.InspectionWorkflowApiTest        : No active profile set, falling back to 1 default profile: "default"
+[2026-10-25T10:09:05.838Z] 2026-10-25T15:39:05.328+05:30  INFO 49336 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[2026-10-25T10:09:05.838Z] 2026-10-25T15:39:05.504+05:30  INFO 49336 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 141 ms. Found 2 JPA repository interfaces.
+[2026-10-25T10:09:06.797Z] 2026-10-25T15:39:06.536+05:30  INFO 49336 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+[2026-10-25T10:09:06.797Z] 2026-10-25T15:39:06.768+05:30  INFO 49336 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.29.Final
+[2026-10-25T10:09:07.065Z] 2026-10-25T15:39:06.951+05:30  INFO 49336 --- [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+[2026-10-25T10:09:08.450Z] 2026-10-25T15:39:08.149+05:30  INFO 49336 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+[2026-10-25T10:09:08.450Z] 2026-10-25T15:39:08.228+05:30  INFO 49336 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+[2026-10-25T10:09:09.026Z] 2026-10-25T15:39:08.659+05:30  INFO 49336 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:vehicle_inspection_test user=SA
+[2026-10-25T10:09:09.026Z] 2026-10-25T15:39:08.663+05:30  INFO 49336 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+[2026-10-25T10:09:09.026Z] 2026-10-25T15:39:08.815+05:30  INFO 49336 --- [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+[2026-10-25T10:09:09.026Z] 	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+[2026-10-25T10:09:09.026Z] 	Database driver: undefined/unknown
+[2026-10-25T10:09:09.026Z] 	Database version: 2.3.232
+[2026-10-25T10:09:09.026Z] 	Autocommit mode: undefined/unknown
+[2026-10-25T10:09:09.026Z] 	Isolation level: undefined/unknown
+[2026-10-25T10:09:09.026Z] 	Minimum pool size: undefined/unknown
+[2026-10-25T10:09:09.026Z] 	Maximum pool size: undefined/unknown
+[2026-10-25T10:09:11.577Z] 2026-10-25T15:39:10.964+05:30  INFO 49336 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+[2026-10-25T10:09:11.577Z] 2026-10-25T15:39:11.061+05:30  INFO 49336 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+[2026-10-25T10:09:12.532Z] 2026-10-25T15:39:12.268+05:30  WARN 49336 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[2026-10-25T10:09:12.532Z] 2026-10-25T15:39:12.324+05:30  INFO 49336 --- [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+[2026-10-25T10:09:14.550Z] 2026-10-25T15:39:13.971+05:30  INFO 49336 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+[2026-10-25T10:09:14.550Z] 2026-10-25T15:39:13.972+05:30  INFO 49336 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+[2026-10-25T10:09:14.550Z] 2026-10-25T15:39:14.005+05:30  INFO 49336 --- [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+[2026-10-25T10:09:14.550Z] 2026-10-25T15:39:14.124+05:30  INFO 49336 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 147 ms
+[2026-10-25T10:09:14.807Z] 2026-10-25T15:39:14.719+05:30  INFO 49336 --- [           main] c.v.api.InspectionWorkflowApiTest        : Started InspectionWorkflowApiTest in 12.74 seconds (process running for 14.479)
+[2026-10-25T10:09:15.386Z] OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+[2026-10-25T10:09:17.932Z] [INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 16.26 s -- in com.vehicleinspection.api.InspectionWorkflowApiTest
+[2026-10-25T10:09:17.932Z] [INFO] 
+[2026-10-25T10:09:17.932Z] [INFO] Results:
+[2026-10-25T10:09:17.932Z] [INFO] 
+[2026-10-25T10:09:17.932Z] [INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
+[2026-10-25T10:09:17.932Z] [INFO] 
+[2026-10-25T10:09:17.932Z] [INFO] ------------------------------------------------------------------------
+[2026-10-25T10:09:17.932Z] [INFO] BUILD SUCCESS
+[2026-10-25T10:09:17.932Z] [INFO] ------------------------------------------------------------------------
+[2026-10-25T10:09:17.933Z] [INFO] Total time:  30.882 s
+[2026-10-25T10:09:17.933Z] [INFO] Finished at: 2026-10-25T15:39:17+05:30
+[2026-10-25T10:09:17.933Z] [INFO] ------------------------------------------------------------------------
+Post stage
+[Pipeline] junit
+[2026-10-25T10:09:18.251Z] Recording test results
+[2026-10-25T10:09:18.274Z] [Checks API] No suitable checks publisher found.
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Package)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] bat
+[2026-10-25T10:09:19.415Z] 
+[2026-10-25T10:09:19.415Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline>mvn -B package -DskipTests 
+[2026-10-25T10:09:21.329Z] [INFO] Scanning for projects...
+[2026-10-25T10:09:21.329Z] [INFO] Loaded 24234 auto-discovered prefixes for remote repository central (prefixes-central.txt)
+[2026-10-25T10:09:21.593Z] [INFO] 
+[2026-10-25T10:09:21.593Z] [INFO] ---------< com.vehicleinspection:vehicle-inspection-workflow >----------
+[2026-10-25T10:09:21.593Z] [INFO] Building vehicle-inspection-workflow 0.0.1-SNAPSHOT
+[2026-10-25T10:09:21.593Z] [INFO]   from pom.xml
+[2026-10-25T10:09:21.593Z] [INFO] --------------------------------[ jar ]---------------------------------
+[2026-10-25T10:09:21.859Z] [INFO] Loaded 74 auto-discovered prefixes for remote repository apache.snapshots (prefixes-apache.snapshots.txt)
+[2026-10-25T10:09:25.156Z] [INFO] 
+[2026-10-25T10:09:25.156Z] [INFO] --- resources:3.3.1:resources (default-resources) @ vehicle-inspection-workflow ---
+[2026-10-25T10:09:25.156Z] [INFO] Copying 1 resource from src\main\resources to target\classes
+[2026-10-25T10:09:25.156Z] [INFO] Copying 7 resources from src\main\resources to target\classes
+[2026-10-25T10:09:25.156Z] [INFO] 
+[2026-10-25T10:09:25.156Z] [INFO] --- compiler:3.14.0:compile (default-compile) @ vehicle-inspection-workflow ---
+[2026-10-25T10:09:25.722Z] [INFO] Nothing to compile - all classes are up to date.
+[2026-10-25T10:09:25.722Z] [INFO] 
+[2026-10-25T10:09:25.722Z] [INFO] --- resources:3.3.1:testResources (default-testResources) @ vehicle-inspection-workflow ---
+[2026-10-25T10:09:25.722Z] [INFO] Copying 1 resource from src\test\resources to target\test-classes
+[2026-10-25T10:09:25.722Z] [INFO] 
+[2026-10-25T10:09:25.722Z] [INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ vehicle-inspection-workflow ---
+[2026-10-25T10:09:25.722Z] [INFO] Nothing to compile - all classes are up to date.
+[2026-10-25T10:09:25.722Z] [INFO] 
+[2026-10-25T10:09:25.722Z] [INFO] --- surefire:3.5.4:test (default-test) @ vehicle-inspection-workflow ---
+[2026-10-25T10:09:26.287Z] [INFO] Tests are skipped.
+[2026-10-25T10:09:26.287Z] [INFO] 
+[2026-10-25T10:09:26.287Z] [INFO] --- jar:3.4.2:jar (default-jar) @ vehicle-inspection-workflow ---
+[2026-10-25T10:09:27.242Z] [INFO] Building jar: C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline\target\vehicle-inspection-workflow-0.0.1-SNAPSHOT.jar
+[2026-10-25T10:09:27.242Z] [INFO] 
+[2026-10-25T10:09:27.242Z] [INFO] --- spring-boot:3.5.6:repackage (repackage) @ vehicle-inspection-workflow ---
+[2026-10-25T10:09:27.242Z] [INFO] Loaded 50 auto-discovered prefixes for remote repository ow2-snapshot (prefixes-ow2-snapshot.txt)
+[2026-10-25T10:09:29.153Z] [INFO] Replacing main artifact C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline\target\vehicle-inspection-workflow-0.0.1-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[2026-10-25T10:09:29.153Z] [INFO] The original artifact has been renamed to C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline\target\vehicle-inspection-workflow-0.0.1-SNAPSHOT.jar.original
+[2026-10-25T10:09:29.153Z] [INFO] ------------------------------------------------------------------------
+[2026-10-25T10:09:29.153Z] [INFO] BUILD SUCCESS
+[2026-10-25T10:09:29.153Z] [INFO] ------------------------------------------------------------------------
+[2026-10-25T10:09:29.153Z] [INFO] Total time:  8.027 s
+[2026-10-25T10:09:29.153Z] [INFO] Finished at: 2026-10-25T15:39:28+05:30
+[2026-10-25T10:09:29.153Z] [INFO] ------------------------------------------------------------------------
+[Pipeline] archiveArtifacts
+[2026-10-25T10:09:29.243Z] Archiving artifacts
+[2026-10-25T10:09:29.319Z] Recording fingerprints
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Docker Build)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] bat
+[2026-10-25T10:09:30.933Z] 
+[2026-10-25T10:09:30.933Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline>docker build -t vehicle-inspection-workflow:1.2.19                         --build-arg APP_VERSION=1.2.19 --build-arg GIT_COMMIT=243e5ae . 
+[2026-10-25T10:09:32.336Z] #0 building with "desktop-linux" instance using docker driver
+[2026-10-25T10:09:32.336Z] 
+[2026-10-25T10:09:32.336Z] #1 [internal] load build definition from Dockerfile
+[2026-10-25T10:09:32.336Z] #1 transferring dockerfile: 1.37kB 0.0s done
+[2026-10-25T10:09:32.336Z] #1 DONE 0.1s
+[2026-10-25T10:09:32.336Z] 
+[2026-10-25T10:09:32.336Z] #2 [internal] load metadata for docker.io/library/eclipse-temurin:17-jre-alpine
+[2026-10-25T10:09:34.268Z] #2 DONE 1.9s
+[2026-10-25T10:09:34.268Z] 
+[2026-10-25T10:09:34.268Z] #3 [internal] load .dockerignore
+[2026-10-25T10:09:34.268Z] #3 transferring context: 161B done
+[2026-10-25T10:09:34.268Z] #3 DONE 0.0s
+[2026-10-25T10:09:34.268Z] 
+[2026-10-25T10:09:34.268Z] #4 [1/4] FROM docker.io/library/eclipse-temurin:17-jre-alpine@sha256:c4a33e6ddb738fe4be0a28a613ea0940cec42d25d7263c3e2238c43354cb19b0
+[2026-10-25T10:09:34.268Z] #4 resolve docker.io/library/eclipse-temurin:17-jre-alpine@sha256:c4a33e6ddb738fe4be0a28a613ea0940cec42d25d7263c3e2238c43354cb19b0 0.0s done
+[2026-10-25T10:09:34.268Z] #4 CACHED
+[2026-10-25T10:09:34.268Z] 
+[2026-10-25T10:09:34.268Z] #5 [internal] load build context
+[2026-10-25T10:09:34.835Z] #5 ...
+[2026-10-25T10:09:34.835Z] 
+[2026-10-25T10:09:34.835Z] #6 [2/4] RUN addgroup -S vehicleapp && adduser -S -G vehicleapp vehicleapp
+[2026-10-25T10:09:34.835Z] #6 DONE 0.5s
+[2026-10-25T10:09:34.835Z] 
+[2026-10-25T10:09:34.835Z] #5 [internal] load build context
+[2026-10-25T10:09:34.835Z] #5 ...
+[2026-10-25T10:09:34.835Z] 
+[2026-10-25T10:09:34.835Z] #7 [3/4] WORKDIR /app
+[2026-10-25T10:09:34.835Z] #7 DONE 0.1s
+[2026-10-25T10:09:34.835Z] 
+[2026-10-25T10:09:34.835Z] #5 [internal] load build context
+[2026-10-25T10:09:38.133Z] #5 transferring context: 58.17MB 3.1s done
+[2026-10-25T10:09:38.133Z] #5 DONE 3.1s
+[2026-10-25T10:09:38.133Z] 
+[2026-10-25T10:09:38.133Z] #8 [4/4] COPY --chown=vehicleapp:vehicleapp target/vehicle-inspection-workflow-*.jar app.jar
+[2026-10-25T10:09:38.133Z] #8 DONE 0.4s
+[2026-10-25T10:09:38.133Z] 
+[2026-10-25T10:09:38.133Z] #9 exporting to image
+[2026-10-25T10:09:38.133Z] #9 exporting layers
+[2026-10-25T10:09:40.682Z] #9 exporting layers 2.9s done
+[2026-10-25T10:09:40.942Z] #9 exporting manifest sha256:e3dd4b007f769780ebdadea98f5585cabaa1be558199aba699f1674978a3c2fb 0.1s done
+[2026-10-25T10:09:40.942Z] #9 exporting config sha256:1b258066dfaf3fcaccc6cf50e78e4523514d627efdd7f324ccdf47896d58afec 0.0s done
+[2026-10-25T10:09:40.942Z] #9 exporting attestation manifest sha256:12585de9c99c6bc0ca64c0ba06bf15930eeeb1466b0ec3904f4e0a773dd7306d
+[2026-10-25T10:09:40.942Z] #9 exporting attestation manifest sha256:12585de9c99c6bc0ca64c0ba06bf15930eeeb1466b0ec3904f4e0a773dd7306d 0.1s done
+[2026-10-25T10:09:40.942Z] #9 exporting manifest list sha256:69fefe733151d2f01e45596e2f152a40c176a7ab23ba06e4890f62d8e34ebf9f 0.0s done
+[2026-10-25T10:09:40.942Z] #9 naming to docker.io/library/vehicle-inspection-workflow:1.2.19
+[2026-10-25T10:09:41.206Z] #9 naming to docker.io/library/vehicle-inspection-workflow:1.2.19 done
+[2026-10-25T10:09:41.206Z] #9 unpacking to docker.io/library/vehicle-inspection-workflow:1.2.19
+[2026-10-25T10:09:41.468Z] #9 unpacking to docker.io/library/vehicle-inspection-workflow:1.2.19 0.6s done
+[2026-10-25T10:09:41.731Z] #9 DONE 3.9s
+[Pipeline] bat
+[2026-10-25T10:09:42.371Z] 
+[2026-10-25T10:09:42.371Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline>docker image inspect vehicle-inspection-workflow:1.2.19 --format "Image {{.Id}} size={{.Size}} labels={{json .Config.Labels}}" 
+[2026-10-25T10:09:42.631Z] Image sha256:69fefe733151d2f01e45596e2f152a40c176a7ab23ba06e4890f62d8e34ebf9f size=119981652 labels={"org.opencontainers.image.authors":"Shlok Rekhraj","org.opencontainers.image.description":"Containerized Vehicle Inspection Workflow","org.opencontainers.image.revision":"243e5ae","org.opencontainers.image.title":"vehicle-inspection-workflow","org.opencontainers.image.version":"1.2.19"}
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Infrastructure)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withCredentials
+[2026-10-25T10:09:44.223Z] Masking supported pattern matches of %DB_PASSWORD%
+[Pipeline] {
+[Pipeline] bat
+[2026-10-25T10:09:44.623Z] 
+[2026-10-25T10:09:44.623Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline>powershell -NoProfile -ExecutionPolicy Bypass -File deploy\windows\ensure-infra.ps1 
+[2026-10-25T10:09:45.193Z] Network vi-net already exists
+[2026-10-25T10:09:45.455Z] Registry vi-registry already running
+[2026-10-25T10:09:46.048Z] MySQL container vi-mysql already running
+[2026-10-25T10:09:46.048Z] Waiting for MySQL to accept connections...
+[2026-10-25T10:09:46.322Z] MySQL is ready
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Selenium Test)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withCredentials
+[2026-10-25T10:09:47.605Z] Masking supported pattern matches of %DB_PASSWORD%
+[Pipeline] {
+[Pipeline] script
+[Pipeline] {
+[Pipeline] bat
+[2026-10-25T10:09:47.987Z] 
+[2026-10-25T10:09:47.987Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline>powershell -NoProfile -ExecutionPolicy Bypass -File deploy\windows\run-container.ps1 -Image vehicle-inspection-workflow:1.2.19 -Name vi-app-test -Environment ci -DbName vehicle_inspection_ci -HostPort 8091 
+[2026-10-25T10:09:49.379Z] Started vi-app-test from vehicle-inspection-workflow:1.2.19 (env=ci, db=vehicle_inspection_ci, port=8091)
+[2026-10-25T10:10:04.265Z] vi-app-test is healthy
+[Pipeline] bat
+[2026-10-25T10:10:04.674Z] 
+[2026-10-25T10:10:04.674Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline>mvn -B -Pselenium test -Dapp.baseUrl=http://localhost:8091 
+[2026-10-25T10:10:07.201Z] [INFO] Scanning for projects...
+[2026-10-25T10:10:07.201Z] [INFO] Loaded 24234 auto-discovered prefixes for remote repository central (prefixes-central.txt)
+[2026-10-25T10:10:07.767Z] [INFO] 
+[2026-10-25T10:10:07.767Z] [INFO] ---------< com.vehicleinspection:vehicle-inspection-workflow >----------
+[2026-10-25T10:10:07.767Z] [INFO] Building vehicle-inspection-workflow 0.0.1-SNAPSHOT
+[2026-10-25T10:10:07.768Z] [INFO]   from pom.xml
+[2026-10-25T10:10:07.768Z] [INFO] --------------------------------[ jar ]---------------------------------
+[2026-10-25T10:10:07.768Z] [INFO] Loaded 74 auto-discovered prefixes for remote repository apache.snapshots (prefixes-apache.snapshots.txt)
+[2026-10-25T10:10:13.158Z] [INFO] 
+[2026-10-25T10:10:13.158Z] [INFO] --- resources:3.3.1:resources (default-resources) @ vehicle-inspection-workflow ---
+[2026-10-25T10:10:13.158Z] [INFO] Copying 1 resource from src\main\resources to target\classes
+[2026-10-25T10:10:13.158Z] [INFO] Copying 7 resources from src\main\resources to target\classes
+[2026-10-25T10:10:13.158Z] [INFO] 
+[2026-10-25T10:10:13.158Z] [INFO] --- compiler:3.14.0:compile (default-compile) @ vehicle-inspection-workflow ---
+[2026-10-25T10:10:13.158Z] [INFO] Nothing to compile - all classes are up to date.
+[2026-10-25T10:10:13.158Z] [INFO] 
+[2026-10-25T10:10:13.158Z] [INFO] --- resources:3.3.1:testResources (default-testResources) @ vehicle-inspection-workflow ---
+[2026-10-25T10:10:13.158Z] [INFO] Copying 1 resource from src\test\resources to target\test-classes
+[2026-10-25T10:10:13.158Z] [INFO] 
+[2026-10-25T10:10:13.158Z] [INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ vehicle-inspection-workflow ---
+[2026-10-25T10:10:13.158Z] [INFO] Nothing to compile - all classes are up to date.
+[2026-10-25T10:10:13.158Z] [INFO] 
+[2026-10-25T10:10:13.158Z] [INFO] --- surefire:3.5.4:test (default-test) @ vehicle-inspection-workflow ---
+[2026-10-25T10:10:13.726Z] [INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[2026-10-25T10:10:13.726Z] [WARNING] System property [app.baseUrl] overwritten by user properties from Maven session
+[2026-10-25T10:10:13.981Z] [INFO] 
+[2026-10-25T10:10:13.981Z] [INFO] -------------------------------------------------------
+[2026-10-25T10:10:13.981Z] [INFO]  T E S T S
+[2026-10-25T10:10:13.981Z] [INFO] -------------------------------------------------------
+[2026-10-25T10:10:15.361Z] [INFO] Running com.vehicleinspection.selenium.ReviewWorkflowSeleniumTest
+[2026-10-25T10:10:17.892Z] Oct 25, 2026 3:40:17 PM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
+[2026-10-25T10:10:17.892Z] WARNING: Unable to find CDP implementation matching 155
+[2026-10-25T10:10:17.892Z] Oct 25, 2026 3:40:17 PM org.openqa.selenium.chromium.ChromiumDriver lambda$new$4
+[2026-10-25T10:10:17.892Z] WARNING: Unable to find version of CDP to use for 155.0.8059.85. You may need to include a dependency on a specific version of the CDP using something similar to `org.seleniumhq.selenium:selenium-devtools-v86:4.38.0` where the version ("v86") matches the version of the chromium-based browser you're using and the version number of the artifact is the same as Selenium's.
+[2026-10-25T10:10:24.469Z] Oct 25, 2026 3:40:23 PM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
+[2026-10-25T10:10:24.469Z] WARNING: Unable to find CDP implementation matching 155
+[2026-10-25T10:10:24.469Z] Oct 25, 2026 3:40:23 PM org.openqa.selenium.chromium.ChromiumDriver lambda$new$4
+[2026-10-25T10:10:24.469Z] WARNING: Unable to find version of CDP to use for 155.0.8059.85. You may need to include a dependency on a specific version of the CDP using something similar to `org.seleniumhq.selenium:selenium-devtools-v86:4.38.0` where the version ("v86") matches the version of the chromium-based browser you're using and the version number of the artifact is the same as Selenium's.
+[2026-10-25T10:10:27.766Z] [INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.34 s -- in com.vehicleinspection.selenium.ReviewWorkflowSeleniumTest
+[2026-10-25T10:10:27.766Z] [INFO] Running com.vehicleinspection.selenium.SubmitRequestSeleniumTest
+[2026-10-25T10:10:28.342Z] Oct 25, 2026 3:40:28 PM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
+[2026-10-25T10:10:28.342Z] WARNING: Unable to find CDP implementation matching 155
+[2026-10-25T10:10:28.342Z] Oct 25, 2026 3:40:28 PM org.openqa.selenium.chromium.ChromiumDriver lambda$new$4
+[2026-10-25T10:10:28.342Z] WARNING: Unable to find version of CDP to use for 155.0.8059.85. You may need to include a dependency on a specific version of the CDP using something similar to `org.seleniumhq.selenium:selenium-devtools-v86:4.38.0` where the version ("v86") matches the version of the chromium-based browser you're using and the version number of the artifact is the same as Selenium's.
+[2026-10-25T10:10:30.884Z] Oct 25, 2026 3:40:30 PM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
+[2026-10-25T10:10:30.884Z] WARNING: Unable to find CDP implementation matching 155
+[2026-10-25T10:10:30.884Z] Oct 25, 2026 3:40:30 PM org.openqa.selenium.chromium.ChromiumDriver lambda$new$4
+[2026-10-25T10:10:30.884Z] WARNING: Unable to find version of CDP to use for 155.0.8059.85. You may need to include a dependency on a specific version of the CDP using something similar to `org.seleniumhq.selenium:selenium-devtools-v86:4.38.0` where the version ("v86") matches the version of the chromium-based browser you're using and the version number of the artifact is the same as Selenium's.
+[2026-10-25T10:10:31.831Z] [INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.170 s -- in com.vehicleinspection.selenium.SubmitRequestSeleniumTest
+[2026-10-25T10:10:31.831Z] [INFO] Running com.vehicleinspection.selenium.UserAccountSeleniumTest
+[2026-10-25T10:10:32.407Z] Oct 25, 2026 3:40:32 PM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
+[2026-10-25T10:10:32.407Z] WARNING: Unable to find CDP implementation matching 155
+[2026-10-25T10:10:32.407Z] Oct 25, 2026 3:40:32 PM org.openqa.selenium.chromium.ChromiumDriver lambda$new$4
+[2026-10-25T10:10:32.407Z] WARNING: Unable to find version of CDP to use for 155.0.8059.85. You may need to include a dependency on a specific version of the CDP using something similar to `org.seleniumhq.selenium:selenium-devtools-v86:4.38.0` where the version ("v86") matches the version of the chromium-based browser you're using and the version number of the artifact is the same as Selenium's.
+[2026-10-25T10:10:34.944Z] Oct 25, 2026 3:40:34 PM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
+[2026-10-25T10:10:34.944Z] WARNING: Unable to find CDP implementation matching 155
+[2026-10-25T10:10:34.944Z] Oct 25, 2026 3:40:34 PM org.openqa.selenium.chromium.ChromiumDriver lambda$new$4
+[2026-10-25T10:10:34.944Z] WARNING: Unable to find version of CDP to use for 155.0.8059.85. You may need to include a dependency on a specific version of the CDP using something similar to `org.seleniumhq.selenium:selenium-devtools-v86:4.38.0` where the version ("v86") matches the version of the chromium-based browser you're using and the version number of the artifact is the same as Selenium's.
+[2026-10-25T10:10:36.851Z] [INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.164 s -- in com.vehicleinspection.selenium.UserAccountSeleniumTest
+[2026-10-25T10:10:37.425Z] [INFO] 
+[2026-10-25T10:10:37.425Z] [INFO] Results:
+[2026-10-25T10:10:37.425Z] [INFO] 
+[2026-10-25T10:10:37.425Z] [INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
+[2026-10-25T10:10:37.425Z] [INFO] 
+[2026-10-25T10:10:37.425Z] [INFO] ------------------------------------------------------------------------
+[2026-10-25T10:10:37.425Z] [INFO] BUILD SUCCESS
+[2026-10-25T10:10:37.425Z] [INFO] ------------------------------------------------------------------------
+[2026-10-25T10:10:37.425Z] [INFO] Total time:  30.375 s
+[2026-10-25T10:10:37.425Z] [INFO] Finished at: 2026-10-25T15:40:37+05:30
+[2026-10-25T10:10:37.425Z] [INFO] ------------------------------------------------------------------------
+[Pipeline] bat
+[2026-10-25T10:10:37.801Z] 
+[2026-10-25T10:10:37.801Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline>(if not exist test-run mkdir test-run )  & docker logs vi-app-test   1>test-run\app-test-container.log 2>&1  & docker rm -f vi-app-test 
+[2026-10-25T10:10:38.747Z] vi-app-test
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // withCredentials
+Post stage
+[Pipeline] junit
+[2026-10-25T10:10:39.098Z] Recording test results
+[2026-10-25T10:10:39.164Z] [Checks API] No suitable checks publisher found.
+[Pipeline] archiveArtifacts
+[2026-10-25T10:10:39.218Z] Archiving artifacts
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Publish Image)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] bat
+[2026-10-25T10:10:40.570Z] 
+[2026-10-25T10:10:40.570Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline>docker tag vehicle-inspection-workflow:1.2.19 localhost:5000/vehicle-inspection-workflow:1.2.19 
+[2026-10-25T10:10:40.832Z] 
+[2026-10-25T10:10:40.832Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline>docker tag vehicle-inspection-workflow:1.2.19 localhost:5000/vehicle-inspection-workflow:latest 
+[2026-10-25T10:10:40.832Z] 
+[2026-10-25T10:10:40.832Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline>docker push localhost:5000/vehicle-inspection-workflow:1.2.19   || exit /b 1 
+[2026-10-25T10:10:41.097Z] The push refers to repository [localhost:5000/vehicle-inspection-workflow]
+[2026-10-25T10:10:41.097Z] 798885a12643: Waiting
+[2026-10-25T10:10:41.097Z] 44136fa355b3: Waiting
+[2026-10-25T10:10:41.097Z] e6b0d0fa06f0: Waiting
+[2026-10-25T10:10:41.097Z] 7b229517ed22: Waiting
+[2026-10-25T10:10:41.359Z] 798885a12643: Waiting
+[2026-10-25T10:10:41.359Z] 44136fa355b3: Waiting
+[2026-10-25T10:10:41.359Z] e6b0d0fa06f0: Waiting
+[2026-10-25T10:10:41.359Z] 7b229517ed22: Waiting
+[2026-10-25T10:10:41.359Z] 798885a12643: Waiting
+[2026-10-25T10:10:41.359Z] 44136fa355b3: Waiting
+[2026-10-25T10:10:41.359Z] e6b0d0fa06f0: Waiting
+[2026-10-25T10:10:41.359Z] 7b229517ed22: Waiting
+[2026-10-25T10:10:41.625Z] 798885a12643: Waiting
+[2026-10-25T10:10:41.625Z] 44136fa355b3: Waiting
+[2026-10-25T10:10:41.625Z] e6b0d0fa06f0: Waiting
+[2026-10-25T10:10:41.625Z] 7b229517ed22: Waiting
+[2026-10-25T10:10:41.625Z] 798885a12643: Waiting
+[2026-10-25T10:10:41.625Z] 44136fa355b3: Waiting
+[2026-10-25T10:10:41.625Z] e6b0d0fa06f0: Waiting
+[2026-10-25T10:10:41.625Z] 7b229517ed22: Waiting
+[2026-10-25T10:10:41.625Z] 7b229517ed22: Waiting
+[2026-10-25T10:10:41.625Z] 798885a12643: Waiting
+[2026-10-25T10:10:41.625Z] 44136fa355b3: Waiting
+[2026-10-25T10:10:41.625Z] e6b0d0fa06f0: Waiting
+[2026-10-25T10:10:41.889Z] e6b0d0fa06f0: Waiting
+[2026-10-25T10:10:41.889Z] 7b229517ed22: Waiting
+[2026-10-25T10:10:41.889Z] 798885a12643: Waiting
+[2026-10-25T10:10:41.889Z] 44136fa355b3: Waiting
+[2026-10-25T10:10:41.889Z] 0d18ae2be4ba: Layer already exists
+[2026-10-25T10:10:41.889Z] 82e3b1f699b0: Waiting
+[2026-10-25T10:10:41.889Z] d785e89d3f30: Waiting
+[2026-10-25T10:10:41.889Z] 7b229517ed22: Layer already exists
+[2026-10-25T10:10:41.889Z] b644faf4666a: Layer already exists
+[2026-10-25T10:10:41.889Z] 23bdd61c2b02: Layer already exists
+[2026-10-25T10:10:41.889Z] 2130041ee457: Waiting
+[2026-10-25T10:10:41.889Z] 44136fa355b3: Already exists
+[2026-10-25T10:10:41.889Z] e6b0d0fa06f0: Layer already exists
+[2026-10-25T10:10:41.889Z] 2130041ee457: Pushed
+[2026-10-25T10:10:41.889Z] 798885a12643: Pushed
+[2026-10-25T10:10:42.156Z] 82e3b1f699b0: Pushed
+[2026-10-25T10:10:42.419Z] d785e89d3f30: Pushed
+[2026-10-25T10:10:42.419Z] 1.2.19: digest: sha256:69fefe733151d2f01e45596e2f152a40c176a7ab23ba06e4890f62d8e34ebf9f size: 856
+[2026-10-25T10:10:42.683Z] 
+[2026-10-25T10:10:42.683Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline>docker push localhost:5000/vehicle-inspection-workflow:latest   || exit /b 1 
+[2026-10-25T10:10:42.683Z] The push refers to repository [localhost:5000/vehicle-inspection-workflow]
+[2026-10-25T10:10:42.948Z] 7b229517ed22: Waiting
+[2026-10-25T10:10:42.948Z] 798885a12643: Waiting
+[2026-10-25T10:10:42.948Z] 44136fa355b3: Waiting
+[2026-10-25T10:10:42.948Z] e6b0d0fa06f0: Waiting
+[2026-10-25T10:10:42.948Z] e6b0d0fa06f0: Waiting
+[2026-10-25T10:10:42.948Z] 7b229517ed22: Waiting
+[2026-10-25T10:10:42.948Z] 798885a12643: Waiting
+[2026-10-25T10:10:42.948Z] 44136fa355b3: Waiting
+[2026-10-25T10:10:42.948Z] 798885a12643: Waiting
+[2026-10-25T10:10:42.948Z] 44136fa355b3: Waiting
+[2026-10-25T10:10:42.948Z] e6b0d0fa06f0: Waiting
+[2026-10-25T10:10:42.948Z] 7b229517ed22: Waiting
+[2026-10-25T10:10:43.213Z] 7b229517ed22: Waiting
+[2026-10-25T10:10:43.213Z] 798885a12643: Waiting
+[2026-10-25T10:10:43.213Z] 44136fa355b3: Waiting
+[2026-10-25T10:10:43.213Z] e6b0d0fa06f0: Waiting
+[2026-10-25T10:10:43.213Z] 798885a12643: Waiting
+[2026-10-25T10:10:43.213Z] 44136fa355b3: Waiting
+[2026-10-25T10:10:43.213Z] e6b0d0fa06f0: Waiting
+[2026-10-25T10:10:43.213Z] 7b229517ed22: Waiting
+[2026-10-25T10:10:43.213Z] 798885a12643: Waiting
+[2026-10-25T10:10:43.213Z] 44136fa355b3: Waiting
+[2026-10-25T10:10:43.213Z] e6b0d0fa06f0: Waiting
+[2026-10-25T10:10:43.213Z] 7b229517ed22: Waiting
+[2026-10-25T10:10:43.476Z] 2130041ee457: Layer already exists
+[2026-10-25T10:10:43.476Z] 82e3b1f699b0: Layer already exists
+[2026-10-25T10:10:43.476Z] 44136fa355b3: Already exists
+[2026-10-25T10:10:43.476Z] e6b0d0fa06f0: Layer already exists
+[2026-10-25T10:10:43.476Z] b644faf4666a: Layer already exists
+[2026-10-25T10:10:43.476Z] 0d18ae2be4ba: Layer already exists
+[2026-10-25T10:10:43.476Z] d785e89d3f30: Layer already exists
+[2026-10-25T10:10:43.476Z] 798885a12643: Already exists
+[2026-10-25T10:10:43.476Z] 7b229517ed22: Layer already exists
+[2026-10-25T10:10:43.476Z] 23bdd61c2b02: Layer already exists
+[2026-10-25T10:10:43.476Z] latest: digest: sha256:69fefe733151d2f01e45596e2f152a40c176a7ab23ba06e4890f62d8e34ebf9f size: 856
+[Pipeline] bat
+[2026-10-25T10:10:43.833Z] 
+[2026-10-25T10:10:43.834Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline>curl -s http://localhost:5000/v2/vehicle-inspection-workflow/tags/list   1>registry-tags.json  & type registry-tags.json 
+[2026-10-25T10:10:43.834Z] {"name":"vehicle-inspection-workflow","tags":["1.2.19","1.2.17","latest"]}
+[Pipeline] archiveArtifacts
+[2026-10-25T10:10:43.902Z] Archiving artifacts
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy Container)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withCredentials
+[2026-10-25T10:10:44.770Z] Masking supported pattern matches of %DB_PASSWORD%
+[Pipeline] {
+[Pipeline] bat
+[2026-10-25T10:10:45.164Z] 
+[2026-10-25T10:10:45.164Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline>powershell -NoProfile -ExecutionPolicy Bypass -File deploy\windows\stop-app.ps1 -WorkDir "C:\vehicle-inspection-deploy\dev" 
+[2026-10-25T10:10:45.737Z] No PID file in C:\vehicle-inspection-deploy\dev - nothing to stop.
+[Pipeline] bat
+[2026-10-25T10:10:46.111Z] 
+[2026-10-25T10:10:46.111Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline>powershell -NoProfile -ExecutionPolicy Bypass -File deploy\windows\deploy-container.ps1 -Image localhost:5000/vehicle-inspection-workflow:1.2.19 -Environment dev -HostPort 8085 -StateDir C:\vehicle-inspection-deploy 
+[2026-10-25T10:10:46.675Z] Currently deployed: localhost:5000/vehicle-inspection-workflow:1.2.17
+[2026-10-25T10:10:46.675Z] Deploying:          localhost:5000/vehicle-inspection-workflow:1.2.19
+[2026-10-25T10:10:47.626Z] 1.2.19: Pulling from vehicle-inspection-workflow
+[2026-10-25T10:10:48.577Z] Digest: sha256:69fefe733151d2f01e45596e2f152a40c176a7ab23ba06e4890f62d8e34ebf9f
+[2026-10-25T10:10:48.577Z] Status: Image is up to date for localhost:5000/vehicle-inspection-workflow:1.2.19
+[2026-10-25T10:10:48.577Z] localhost:5000/vehicle-inspection-workflow:1.2.19
+[2026-10-25T10:10:58.338Z] Started vi-app-dev from localhost:5000/vehicle-inspection-workflow:1.2.19 (env=dev, db=vehicle_inspection_dev, port=8085)
+[2026-10-25T10:11:20.370Z] vi-app-dev is healthy
+[2026-10-25T10:11:20.370Z] DEPLOYED localhost:5000/vehicle-inspection-workflow:1.2.19 as vi-app-dev
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] bat
+[2026-10-25T10:11:20.872Z] 
+[2026-10-25T10:11:20.872Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline>powershell -NoProfile -ExecutionPolicy Bypass -File deploy\windows\deploy-nginx.ps1 -Upstream vi-app-dev:8080 -Network vi-net -ConfigDir "C:\vehicle-inspection-deploy\dev\nginx" -Port 8088 -Name vi-nginx-dev 
+[2026-10-25T10:11:22.263Z] e28bae0b479916c3eb462c688e8388b8a505520776f0054b8ea3433d45288431
+[2026-10-25T10:11:22.835Z] Nginx 'vi-nginx-dev' listening on http://localhost:8088 -> vi-app-dev:8080
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Smoke Test)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] bat
+[2026-10-25T10:11:24.455Z] 
+[2026-10-25T10:11:24.455Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline>powershell -NoProfile -ExecutionPolicy Bypass -File deploy\windows\wait-for-health.ps1 -Url http://localhost:8088/actuator/health -TimeoutSeconds 90 
+[2026-10-25T10:11:25.025Z] Health check passed: http://localhost:8088/actuator/health -> UP
+[2026-10-25T10:11:25.025Z] {
+[2026-10-25T10:11:25.025Z]     "status":  "UP",
+[2026-10-25T10:11:25.025Z]     "components":  {
+[2026-10-25T10:11:25.025Z]                        "db":  {
+[2026-10-25T10:11:25.025Z]                                   "status":  "UP",
+[2026-10-25T10:11:25.025Z]                                   "details":  {
+[2026-10-25T10:11:25.025Z]                                                   "database":  "MySQL",
+[2026-10-25T10:11:25.025Z]                                                   "validationQuery":  "isValid()"
+[2026-10-25T10:11:25.025Z]                                               }
+[2026-10-25T10:11:25.025Z]                               },
+[2026-10-25T10:11:25.025Z]                        "diskSpace":  {
+[2026-10-25T10:11:25.025Z]                                          "status":  "UP",
+[2026-10-25T10:11:25.025Z]                                          "details":  {
+[2026-10-25T10:11:25.025Z]                                                          "total":  1081101176832,
+[2026-10-25T10:11:25.025Z]                                                          "free":  1018421579776,
+[2026-10-25T10:11:25.025Z]                                                          "threshold":  10485760,
+[2026-10-25T10:11:25.025Z]                                                          "path":  "/app/.",
+[2026-10-25T10:11:25.025Z]                                                          "exists":  true
+[2026-10-25T10:11:25.025Z]                                                      }
+[2026-10-25T10:11:25.025Z]                                      },
+[2026-10-25T10:11:25.025Z]                        "ping":  {
+[2026-10-25T10:11:25.025Z]                                     "status":  "UP"
+[2026-10-25T10:11:25.025Z]                                 },
+[2026-10-25T10:11:25.025Z]                        "ssl":  {
+[2026-10-25T10:11:25.025Z]                                    "status":  "UP",
+[2026-10-25T10:11:25.025Z]                                    "details":  {
+[2026-10-25T10:11:25.025Z]                                                    "validChains":  [
+[2026-10-25T10:11:25.025Z] 
+[2026-10-25T10:11:25.025Z]                                                                    ],
+[2026-10-25T10:11:25.025Z]                                                    "invalidChains":  [
+[2026-10-25T10:11:25.025Z] 
+[2026-10-25T10:11:25.025Z]                                                                      ]
+[2026-10-25T10:11:25.025Z]                                                }
+[2026-10-25T10:11:25.025Z]                                }
+[2026-10-25T10:11:25.025Z]                    }
+[2026-10-25T10:11:25.025Z] }
+[Pipeline] bat
+[2026-10-25T10:11:25.402Z] 
+[2026-10-25T10:11:25.402Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline>curl -s http://localhost:8088/actuator/info 
+[2026-10-25T10:11:25.403Z] {"app":{"name":"Vehicle Inspection Workflow","version":"1.2.19","environment":"dev"}}
+[Pipeline] bat
+[2026-10-25T10:11:25.795Z] 
+[2026-10-25T10:11:25.795Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Pipeline>docker ps --filter name=vi- --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}" 
+[2026-10-25T10:11:25.795Z] NAMES          IMAGE                                               STATUS                    PORTS
+[2026-10-25T10:11:25.795Z] vi-nginx-dev   nginx:1.27-alpine                                   Up 3 seconds              0.0.0.0:8088->80/tcp, [::]:8088->80/tcp
+[2026-10-25T10:11:25.795Z] vi-app-dev     localhost:5000/vehicle-inspection-workflow:1.2.19   Up 30 seconds (healthy)   0.0.0.0:8085->8080/tcp, [::]:8085->8080/tcp
+[2026-10-25T10:11:25.795Z] vi-node1       ubuntu:22.04                                        Up 9 minutes              0.0.0.0:8095->80/tcp
+[2026-10-25T10:11:25.795Z] vi-mysql       mysql:8.4                                           Up 15 minutes             3306/tcp, 33060/tcp
+[2026-10-25T10:11:25.796Z] vi-registry    registry:2                                          Up 15 minutes             0.0.0.0:5000->5000/tcp, [::]:5000->5000/tcp
+[2026-10-25T10:11:25.796Z] vi-node-db     mysql:8.4                                           Up 21 minutes             3306/tcp, 33060/tcp
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] echo
+[2026-10-25T10:11:26.314Z] Deployed localhost:5000/vehicle-inspection-workflow:1.2.19 to dev - http://localhost:8088/
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // timestamps
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS

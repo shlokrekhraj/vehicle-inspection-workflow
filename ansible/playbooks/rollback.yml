@@ -1,0 +1,51 @@
+# Manual recovery: switch back to the previous stable release.
+- name: Roll back to the previous stable release
+  hosts: app_nodes
+  gather_facts: false
+  tasks:
+    - name: Read the recorded previous release
+      ansible.builtin.slurp:
+        src: "{{ app_home }}/previous_release"
+      register: previous_file
+
+    - name: Read the current release
+      ansible.builtin.command: readlink -f {{ app_home }}/current
+      register: current_release
+      changed_when: false
+
+    - name: Decide rollback target
+      ansible.builtin.set_fact:
+        rollback_to: "{{ previous_file.content | b64decode | trim }}"
+        rolling_back_from: "{{ current_release.stdout }}"
+
+    - name: Check the target release still exists
+      ansible.builtin.stat:
+        path: "{{ rollback_to }}/app.jar"
+      register: target_jar
+      failed_when: not target_jar.stat.exists
+
+    - name: Show plan
+      ansible.builtin.debug:
+        msg: "Rolling back {{ rolling_back_from | basename }} -> {{ rollback_to | basename }}"
+
+    - name: Point 'current' at the previous release
+      ansible.builtin.file:
+        src: "{{ rollback_to }}"
+        dest: "{{ app_home }}/current"
+        state: link
+        force: true
+
+    - name: Remember the release we rolled back from
+      ansible.builtin.copy:
+        content: "{{ rolling_back_from }}"
+        dest: "{{ app_home }}/previous_release"
+        mode: "0644"
+
+    - name: Restart the application
+      ansible.builtin.sysvinit:
+        name: "{{ app_name }}"
+        state: restarted
+
+    - name: Verify recovered release
+      ansible.builtin.include_role:
+        name: verify

@@ -7,7 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class VehicleInspectionApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(VehicleInspectionApplication.class, args);
+        SpringApplication.run(
+                VehicleInspectionApplication.class,
+                args
+        );
     }
-
 }

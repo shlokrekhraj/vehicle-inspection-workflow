@@ -1,0 +1,4 @@
+- name: reload nginx
+  ansible.builtin.sysvinit:
+    name: nginx
+    state: reloaded

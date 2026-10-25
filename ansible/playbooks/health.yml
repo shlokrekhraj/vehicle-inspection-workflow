@@ -1,0 +1,5 @@
+- name: Health check
+  hosts: app_nodes
+  gather_facts: false
+  roles:
+    - verify

@@ -1,0 +1,958 @@
+Started by user Shlok Tarun Rekhraj
+Obtained Jenkinsfile.provision from git https://github.com/shlokrekhraj/vehicle-inspection-workflow.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Provisioning
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git.exe rev-parse --resolve-git-dir C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Provisioning\.git # timeout=10
+Fetching changes from the remote Git repository
+ > git.exe config remote.origin.url https://github.com/shlokrekhraj/vehicle-inspection-workflow.git # timeout=10
+Fetching upstream changes from https://github.com/shlokrekhraj/vehicle-inspection-workflow.git
+ > git.exe --version # timeout=10
+ > git --version # 'git version 2.53.0.windows.2'
+ > git.exe fetch --tags --force --progress -- https://github.com/shlokrekhraj/vehicle-inspection-workflow.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git.exe rev-parse "refs/remotes/origin/develop^{commit}" # timeout=10
+Checking out Revision 87f052b50594b520ed620829fecd2a4acfd2393a (refs/remotes/origin/develop)
+ > git.exe config core.sparsecheckout # timeout=10
+ > git.exe checkout -f 87f052b50594b520ed620829fecd2a4acfd2393a # timeout=10
+Commit message: "fix: tolerate dashboard re-render in Selenium waits; use Docker CLI connection for Ansible"
+ > git.exe rev-list --no-walk 87865f4b3a5238ec42dff9c5ab74f266207e32dd # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] timestamps
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Tool Install)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Package)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] checkout
+[2026-10-25T09:59:30.019Z] Selected Git installation does not exist. Using Default
+[2026-10-25T09:59:30.019Z] The recommended git tool is: NONE
+[2026-10-25T09:59:30.019Z] No credentials specified
+[2026-10-25T09:59:30.020Z]  > git.exe rev-parse --resolve-git-dir C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Provisioning\.git # timeout=10
+[2026-10-25T09:59:30.303Z] Fetching changes from the remote Git repository
+[2026-10-25T09:59:30.319Z]  > git.exe config remote.origin.url https://github.com/shlokrekhraj/vehicle-inspection-workflow.git # timeout=10
+[2026-10-25T09:59:30.747Z] Fetching upstream changes from https://github.com/shlokrekhraj/vehicle-inspection-workflow.git
+[2026-10-25T09:59:30.748Z]  > git.exe --version # timeout=10
+[2026-10-25T09:59:31.071Z]  > git --version # 'git version 2.53.0.windows.2'
+[2026-10-25T09:59:31.072Z]  > git.exe fetch --tags --force --progress -- https://github.com/shlokrekhraj/vehicle-inspection-workflow.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+[2026-10-25T09:59:32.684Z]  > git.exe rev-parse "refs/remotes/origin/develop^{commit}" # timeout=10
+[2026-10-25T09:59:33.173Z] Checking out Revision 87f052b50594b520ed620829fecd2a4acfd2393a (refs/remotes/origin/develop)
+[2026-10-25T09:59:33.173Z]  > git.exe config core.sparsecheckout # timeout=10
+[2026-10-25T09:59:33.749Z]  > git.exe checkout -f 87f052b50594b520ed620829fecd2a4acfd2393a # timeout=10
+[2026-10-25T09:59:34.341Z] Commit message: "fix: tolerate dashboard re-render in Selenium waits; use Docker CLI connection for Ansible"
+[Pipeline] bat
+[2026-10-25T09:59:35.138Z] 
+[2026-10-25T09:59:35.138Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Provisioning>docker version   && docker compose version 
+[2026-10-25T09:59:35.445Z] Client:
+[2026-10-25T09:59:35.445Z]  Version:           29.7.2
+[2026-10-25T09:59:35.445Z]  API version:       1.55
+[2026-10-25T09:59:35.445Z]  Go version:        go1.26.5
+[2026-10-25T09:59:35.445Z]  Git commit:        a7dcaa6
+[2026-10-25T09:59:35.445Z]  Built:             Wed Aug  5 18:31:33 2026
+[2026-10-25T09:59:35.445Z]  OS/Arch:           windows/amd64
+[2026-10-25T09:59:35.445Z]  Context:           desktop-linux
+[2026-10-25T09:59:35.445Z] 
+[2026-10-25T09:59:35.445Z] Server: Docker Desktop 4.90.0 (238679)
+[2026-10-25T09:59:35.445Z]  Engine:
+[2026-10-25T09:59:35.445Z]   Version:          29.7.2
+[2026-10-25T09:59:35.445Z]   API version:      1.55 (minimum version 1.40)
+[2026-10-25T09:59:35.445Z]   Go version:       go1.26.5
+[2026-10-25T09:59:35.445Z]   Git commit:       6a43e3d
+[2026-10-25T09:59:35.445Z]   Built:            Wed Aug  5 18:28:36 2026
+[2026-10-25T09:59:35.445Z]   OS/Arch:          linux/amd64
+[2026-10-25T09:59:35.445Z]   Experimental:     false
+[2026-10-25T09:59:35.445Z]  containerd:
+[2026-10-25T09:59:35.445Z]   Version:          v2.3.3
+[2026-10-25T09:59:35.445Z]   GitCommit:        aad11006b869517fcd3009450b6f82da282e1a9b
+[2026-10-25T09:59:35.445Z]  runc:
+[2026-10-25T09:59:35.445Z]   Version:          1.4.3
+[2026-10-25T09:59:35.445Z]   GitCommit:        v1.4.3-0-gbb14dabe
+[2026-10-25T09:59:35.445Z]  docker-init:
+[2026-10-25T09:59:35.445Z]   Version:          0.19.0
+[2026-10-25T09:59:35.445Z]   GitCommit:        de40ad0
+[2026-10-25T09:59:36.035Z] Docker Compose version v5.5.1
+[Pipeline] bat
+[2026-10-25T09:59:36.890Z] 
+[2026-10-25T09:59:36.890Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Provisioning>mvn -B clean package -DskipTests 
+[2026-10-25T09:59:39.433Z] [INFO] Scanning for projects...
+[2026-10-25T09:59:39.698Z] [INFO] Loaded 24234 auto-discovered prefixes for remote repository central (prefixes-central.txt)
+[2026-10-25T09:59:41.082Z] [INFO] 
+[2026-10-25T09:59:41.082Z] [INFO] ---------< com.vehicleinspection:vehicle-inspection-workflow >----------
+[2026-10-25T09:59:41.082Z] [INFO] Building vehicle-inspection-workflow 0.0.1-SNAPSHOT
+[2026-10-25T09:59:41.082Z] [INFO]   from pom.xml
+[2026-10-25T09:59:41.082Z] [INFO] --------------------------------[ jar ]---------------------------------
+[2026-10-25T09:59:41.349Z] [INFO] Loaded 74 auto-discovered prefixes for remote repository apache.snapshots (prefixes-apache.snapshots.txt)
+[2026-10-25T09:59:56.486Z] [INFO] 
+[2026-10-25T09:59:56.486Z] [INFO] --- clean:3.4.1:clean (default-clean) @ vehicle-inspection-workflow ---
+[2026-10-25T09:59:57.189Z] [INFO] Deleting C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Provisioning\target
+[2026-10-25T09:59:57.891Z] [INFO] 
+[2026-10-25T09:59:57.891Z] [INFO] --- resources:3.3.1:resources (default-resources) @ vehicle-inspection-workflow ---
+[2026-10-25T09:59:59.333Z] [INFO] Copying 1 resource from src\main\resources to target\classes
+[2026-10-25T09:59:59.615Z] [INFO] Copying 7 resources from src\main\resources to target\classes
+[2026-10-25T09:59:59.615Z] [INFO] 
+[2026-10-25T09:59:59.615Z] [INFO] --- compiler:3.14.0:compile (default-compile) @ vehicle-inspection-workflow ---
+[2026-10-25T10:00:01.683Z] [INFO] Recompiling the module because of changed source code.
+[2026-10-25T10:00:01.683Z] [INFO] Compiling 20 source files with javac [debug parameters release 17] to target\classes
+[2026-10-25T10:00:20.192Z] [INFO] 
+[2026-10-25T10:00:20.192Z] [INFO] --- resources:3.3.1:testResources (default-testResources) @ vehicle-inspection-workflow ---
+[2026-10-25T10:00:20.192Z] [INFO] Copying 1 resource from src\test\resources to target\test-classes
+[2026-10-25T10:00:20.192Z] [INFO] 
+[2026-10-25T10:00:20.192Z] [INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ vehicle-inspection-workflow ---
+[2026-10-25T10:00:20.192Z] [INFO] Recompiling the module because of changed dependency.
+[2026-10-25T10:00:20.192Z] [INFO] Compiling 6 source files with javac [debug parameters release 17] to target\test-classes
+[2026-10-25T10:00:32.754Z] [INFO] 
+[2026-10-25T10:00:32.754Z] [INFO] --- surefire:3.5.4:test (default-test) @ vehicle-inspection-workflow ---
+[2026-10-25T10:00:32.754Z] [INFO] Tests are skipped.
+[2026-10-25T10:00:32.754Z] [INFO] 
+[2026-10-25T10:00:32.754Z] [INFO] --- jar:3.4.2:jar (default-jar) @ vehicle-inspection-workflow ---
+[2026-10-25T10:00:36.325Z] [INFO] Building jar: C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Provisioning\target\vehicle-inspection-workflow-0.0.1-SNAPSHOT.jar
+[2026-10-25T10:00:36.592Z] [INFO] 
+[2026-10-25T10:00:36.592Z] [INFO] --- spring-boot:3.5.6:repackage (repackage) @ vehicle-inspection-workflow ---
+[2026-10-25T10:00:36.592Z] [INFO] Loaded 50 auto-discovered prefixes for remote repository ow2-snapshot (prefixes-ow2-snapshot.txt)
+[2026-10-25T10:00:44.743Z] [INFO] Replacing main artifact C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Provisioning\target\vehicle-inspection-workflow-0.0.1-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[2026-10-25T10:00:44.743Z] [INFO] The original artifact has been renamed to C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Provisioning\target\vehicle-inspection-workflow-0.0.1-SNAPSHOT.jar.original
+[2026-10-25T10:00:44.743Z] [INFO] ------------------------------------------------------------------------
+[2026-10-25T10:00:44.743Z] [INFO] BUILD SUCCESS
+[2026-10-25T10:00:44.743Z] [INFO] ------------------------------------------------------------------------
+[2026-10-25T10:00:44.743Z] [INFO] Total time:  01:04 min
+[2026-10-25T10:00:44.743Z] [INFO] Finished at: 2026-10-25T15:30:43+05:30
+[2026-10-25T10:00:44.743Z] [INFO] ------------------------------------------------------------------------
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build Ansible Control Node)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withCredentials
+[2026-10-25T10:00:45.635Z] Masking supported pattern matches of %DB_PASSWORD%
+[Pipeline] {
+[Pipeline] bat
+[2026-10-25T10:00:46.032Z] 
+[2026-10-25T10:00:46.032Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Provisioning>docker compose -f ansible/docker-compose.yml build 
+[2026-10-25T10:00:46.974Z]  Image vi-ansible-controller:1.0 Building 
+[2026-10-25T10:00:47.236Z] #1 [internal] load local bake definitions
+[2026-10-25T10:00:47.495Z] #1 reading from stdin 641B done
+[2026-10-25T10:00:47.495Z] #1 DONE 0.0s
+[2026-10-25T10:00:48.434Z] 
+[2026-10-25T10:00:48.435Z] #2 [internal] load build definition from Dockerfile
+[2026-10-25T10:00:48.435Z] #2 transferring dockerfile: 858B 0.1s done
+[2026-10-25T10:00:48.435Z] #2 DONE 0.1s
+[2026-10-25T10:00:48.435Z] 
+[2026-10-25T10:00:48.435Z] #3 [internal] load metadata for docker.io/library/python:3.12-slim
+[2026-10-25T10:00:49.813Z] #3 DONE 1.5s
+[2026-10-25T10:00:49.813Z] 
+[2026-10-25T10:00:49.813Z] #4 [internal] load .dockerignore
+[2026-10-25T10:00:49.813Z] #4 transferring context: 2B 0.0s done
+[2026-10-25T10:00:49.813Z] #4 DONE 0.0s
+[2026-10-25T10:00:49.814Z] 
+[2026-10-25T10:00:49.814Z] #5 [1/5] FROM docker.io/library/python:3.12-slim@sha256:a0f57064cbdcd6285fa45f51237ab0b35ea8ebaed06a1f5973e89e19dfb86704
+[2026-10-25T10:00:49.814Z] #5 resolve docker.io/library/python:3.12-slim@sha256:a0f57064cbdcd6285fa45f51237ab0b35ea8ebaed06a1f5973e89e19dfb86704 0.1s done
+[2026-10-25T10:00:50.080Z] #5 DONE 0.1s
+[2026-10-25T10:00:50.080Z] 
+[2026-10-25T10:00:50.080Z] #6 [2/5] RUN pip install --no-cache-dir "ansible==10.7.0" "docker==7.1.0" "requests==2.32.3"
+[2026-10-25T10:00:50.080Z] #6 CACHED
+[2026-10-25T10:00:50.080Z] 
+[2026-10-25T10:00:50.080Z] #7 [3/5] ADD https://download.docker.com/linux/static/stable/x86_64/docker-27.5.1.tgz /tmp/docker.tgz
+[2026-10-25T10:01:00.047Z] #7 DONE 10.0s
+[2026-10-25T10:01:00.047Z] 
+[2026-10-25T10:01:00.047Z] #7 [3/5] ADD https://download.docker.com/linux/static/stable/x86_64/docker-27.5.1.tgz /tmp/docker.tgz
+[2026-10-25T10:01:00.047Z] #7 DONE 10.0s
+[2026-10-25T10:01:00.047Z] 
+[2026-10-25T10:01:00.047Z] #8 [3/5] ADD https://download.docker.com/linux/static/stable/x86_64/docker-27.5.1.tgz /tmp/docker.tgz
+[2026-10-25T10:01:01.949Z] #8 DONE 1.9s
+[2026-10-25T10:01:01.949Z] 
+[2026-10-25T10:01:01.949Z] #9 [4/5] RUN tar -xzf /tmp/docker.tgz -C /tmp && mv /tmp/docker/docker /usr/local/bin/docker     && rm -rf /tmp/docker /tmp/docker.tgz && docker --version
+[2026-10-25T10:01:08.500Z] #9 6.680 Docker version 27.5.1, build 9f9e405
+[2026-10-25T10:01:08.766Z] #9 DONE 6.7s
+[2026-10-25T10:01:08.766Z] 
+[2026-10-25T10:01:08.766Z] #10 [5/5] WORKDIR /workspace/ansible
+[2026-10-25T10:01:08.766Z] #10 DONE 0.2s
+[2026-10-25T10:01:09.031Z] 
+[2026-10-25T10:01:09.031Z] #11 exporting to image
+[2026-10-25T10:01:09.031Z] #11 exporting layers
+[2026-10-25T10:01:13.214Z] #11 exporting layers 4.1s done
+[2026-10-25T10:01:13.214Z] #11 exporting manifest sha256:22eda9a07d6a337a324567c3140745db4e1d246267b6d9f665f550dc5004cad9 0.1s done
+[2026-10-25T10:01:13.214Z] #11 exporting config sha256:324018a497bdf4cfa492dffa684227c542d9c856d45713f017e15f8d2c0420fa
+[2026-10-25T10:01:13.214Z] #11 exporting config sha256:324018a497bdf4cfa492dffa684227c542d9c856d45713f017e15f8d2c0420fa 0.1s done
+[2026-10-25T10:01:13.214Z] #11 exporting attestation manifest sha256:f37fa91e8d6bc3e46dc49cb0594582842d5dcfac8010e8da21526d437587483b
+[2026-10-25T10:01:13.478Z] #11 exporting attestation manifest sha256:f37fa91e8d6bc3e46dc49cb0594582842d5dcfac8010e8da21526d437587483b 0.1s done
+[2026-10-25T10:01:13.478Z] #11 exporting manifest list sha256:f6d5d7e5e0a6f76f33132668e02ac57d9f3efd6e6faf4e675f37a6bfcb2c7892 0.1s done
+[2026-10-25T10:01:13.478Z] #11 naming to docker.io/library/vi-ansible-controller:1.0
+[2026-10-25T10:01:13.478Z] #11 naming to docker.io/library/vi-ansible-controller:1.0 done
+[2026-10-25T10:01:13.478Z] #11 unpacking to docker.io/library/vi-ansible-controller:1.0
+[2026-10-25T10:01:15.388Z] #11 unpacking to docker.io/library/vi-ansible-controller:1.0 2.0s done
+[2026-10-25T10:01:15.650Z] #11 DONE 6.7s
+[2026-10-25T10:01:15.910Z] 
+[2026-10-25T10:01:15.910Z] #12 resolving provenance for metadata file
+[2026-10-25T10:01:15.910Z] #12 DONE 0.1s
+[2026-10-25T10:01:16.175Z]  Image vi-ansible-controller:1.0 Built 
+[Pipeline] bat
+[2026-10-25T10:01:16.536Z] 
+[2026-10-25T10:01:16.536Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Provisioning>docker compose -f ansible/docker-compose.yml run --rm -T ansible ansible --version 
+[2026-10-25T10:01:17.110Z]  Container ansible-ansible-run-02ffecca37ee Creating 
+[2026-10-25T10:01:23.693Z]  Container ansible-ansible-run-02ffecca37ee Created 
+[2026-10-25T10:01:27.883Z] ansible [core 2.17.14]
+[2026-10-25T10:01:27.883Z]   config file = /workspace/ansible/ansible.cfg
+[2026-10-25T10:01:27.883Z]   configured module search path = ['/root/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+[2026-10-25T10:01:27.883Z]   ansible python module location = /usr/local/lib/python3.12/site-packages/ansible
+[2026-10-25T10:01:27.883Z]   ansible collection location = /root/.ansible/collections:/usr/share/ansible/collections
+[2026-10-25T10:01:27.883Z]   executable location = /usr/local/bin/ansible
+[2026-10-25T10:01:27.883Z]   python version = 3.12.15 (main, Oct 21 2026, 01:08:20) [GCC 14.2.0] (/usr/local/bin/python3.12)
+[2026-10-25T10:01:27.883Z]   jinja version = 3.1.6
+[2026-10-25T10:01:27.883Z]   libyaml = True
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Provision Clean Node + Configure + Deploy)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withCredentials
+[2026-10-25T10:01:29.260Z] Masking supported pattern matches of %DB_PASSWORD%
+[Pipeline] {
+[Pipeline] bat
+[2026-10-25T10:01:29.697Z] 
+[2026-10-25T10:01:29.697Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Provisioning>powershell -NoProfile -ExecutionPolicy Bypass -File ansible\run-ansible.ps1 -Playbook site.yml -AppVersion 1.3.4 -ExtraArgs "-e fresh_node=true" -LogFile ansible-logs\01-first-run.log 
+[2026-10-25T10:01:30.641Z] > docker compose -f ansible/docker-compose.yml run --rm -T -e ANSIBLE_FORCE_COLOR=0 ansible ansible-playbook playbooks/site.yml -e fresh_node=true
+[2026-10-25T10:01:30.904Z]  Container ansible-ansible-run-ecde1dffdcd3 Creating 
+[2026-10-25T10:01:31.171Z]  Container ansible-ansible-run-ecde1dffdcd3 Created 
+[2026-10-25T10:01:37.747Z] 
+[2026-10-25T10:01:37.747Z] PLAY [Provision infrastructure (network, database, clean target node)] *********
+[2026-10-25T10:01:41.043Z] 
+[2026-10-25T10:01:41.043Z] TASK [provision : Create the Docker network for the environment] ***************
+[2026-10-25T10:01:41.043Z] ok: [localhost]
+[2026-10-25T10:01:43.009Z] 
+[2026-10-25T10:01:43.009Z] TASK [provision : Run the MySQL database container] ****************************
+[2026-10-25T10:01:43.009Z] ok: [localhost]
+[2026-10-25T10:01:43.949Z] 
+[2026-10-25T10:01:43.949Z] TASK [provision : Wait until MySQL accepts TCP connections] ********************
+[2026-10-25T10:01:43.949Z] ok: [localhost]
+[2026-10-25T10:01:49.239Z] 
+[2026-10-25T10:01:49.239Z] TASK [provision : Provision the target node from a clean image (ubuntu:22.04)] ***
+[2026-10-25T10:01:49.239Z] changed: [localhost] => (item=vi-node1)
+[2026-10-25T10:01:49.239Z] 
+[2026-10-25T10:01:49.239Z] PLAY [Configure target node prerequisites] *************************************
+[2026-10-25T10:02:15.790Z] 
+[2026-10-25T10:02:15.790Z] TASK [bootstrap : Install Python on the node if it is missing] *****************
+[2026-10-25T10:02:15.790Z] changed: [vi-node1]
+[2026-10-25T10:02:15.790Z] 
+[2026-10-25T10:02:15.790Z] TASK [bootstrap : Gather facts] ************************************************
+[2026-10-25T10:02:15.790Z] ok: [vi-node1]
+[2026-10-25T10:03:02.477Z] 
+[2026-10-25T10:03:02.477Z] TASK [common : Install required packages] **************************************
+[2026-10-25T10:03:02.477Z] changed: [vi-node1]
+[2026-10-25T10:03:02.477Z] 
+[2026-10-25T10:03:02.477Z] TASK [common : Create application group] ***************************************
+[2026-10-25T10:03:02.477Z] changed: [vi-node1]
+[2026-10-25T10:03:02.477Z] 
+[2026-10-25T10:03:02.477Z] TASK [common : Create application user (no login shell)] ***********************
+[2026-10-25T10:03:02.477Z] changed: [vi-node1]
+[2026-10-25T10:03:02.477Z] 
+[2026-10-25T10:03:02.477Z] TASK [common : Create application folders] *************************************
+[2026-10-25T10:03:02.477Z] changed: [vi-node1] => (item={'path': '/opt/vehicle-inspection', 'owner': 'root', 'mode': '0755'})
+[2026-10-25T10:03:02.477Z] changed: [vi-node1] => (item={'path': '/opt/vehicle-inspection/releases', 'owner': 'root', 'mode': '0755'})
+[2026-10-25T10:03:02.477Z] changed: [vi-node1] => (item={'path': '/opt/vehicle-inspection/logs', 'owner': 'vehicleapp', 'mode': '0750'})
+[2026-10-25T10:03:02.477Z] changed: [vi-node1] => (item={'path': '/etc/vehicle-inspection', 'owner': 'root', 'mode': '0750'})
+[2026-10-25T10:03:03.850Z] 
+[2026-10-25T10:03:03.850Z] TASK [common : Write application environment file] *****************************
+[2026-10-25T10:03:03.850Z] changed: [vi-node1]
+[2026-10-25T10:03:04.792Z] 
+[2026-10-25T10:03:04.792Z] TASK [common : Install the application service script] *************************
+[2026-10-25T10:03:04.792Z] changed: [vi-node1]
+[2026-10-25T10:03:05.056Z] 
+[2026-10-25T10:03:05.056Z] TASK [common : Enable the application service at boot] *************************
+[2026-10-25T10:03:05.056Z] changed: [vi-node1]
+[2026-10-25T10:03:08.203Z] 
+[2026-10-25T10:03:08.203Z] TASK [nginx : Configure Nginx as reverse proxy for the app (port 80 -> 8080)] ***
+[2026-10-25T10:03:08.203Z] changed: [vi-node1]
+[2026-10-25T10:03:09.200Z] 
+[2026-10-25T10:03:09.200Z] TASK [nginx : Enable the site] *************************************************
+[2026-10-25T10:03:09.200Z] changed: [vi-node1]
+[2026-10-25T10:03:09.791Z] 
+[2026-10-25T10:03:09.791Z] TASK [nginx : Disable the default site] ****************************************
+[2026-10-25T10:03:09.791Z] changed: [vi-node1]
+[2026-10-25T10:03:10.366Z] 
+[2026-10-25T10:03:10.366Z] TASK [nginx : Validate Nginx configuration] ************************************
+[2026-10-25T10:03:10.366Z] ok: [vi-node1]
+[2026-10-25T10:03:10.941Z] 
+[2026-10-25T10:03:10.941Z] TASK [nginx : Ensure Nginx is running and enabled] *****************************
+[2026-10-25T10:03:10.941Z] changed: [vi-node1]
+[2026-10-25T10:03:11.515Z] 
+[2026-10-25T10:03:11.515Z] RUNNING HANDLER [common : Check whether a release is deployed] *****************
+[2026-10-25T10:03:11.515Z] ok: [vi-node1]
+[2026-10-25T10:03:11.780Z] 
+[2026-10-25T10:03:11.780Z] RUNNING HANDLER [nginx : reload nginx] *****************************************
+[2026-10-25T10:03:11.780Z] changed: [vi-node1]
+[2026-10-25T10:03:11.780Z] 
+[2026-10-25T10:03:11.780Z] PLAY [Deploy the application (automatic rollback on failed health check)] ******
+[2026-10-25T10:03:11.780Z] 
+[2026-10-25T10:03:11.780Z] TASK [app : Work out release paths] ********************************************
+[2026-10-25T10:03:11.780Z] ok: [vi-node1]
+[2026-10-25T10:03:12.723Z] 
+[2026-10-25T10:03:12.723Z] TASK [app : Read the currently deployed release] *******************************
+[2026-10-25T10:03:12.723Z] ok: [vi-node1]
+[2026-10-25T10:03:12.723Z] 
+[2026-10-25T10:03:12.723Z] TASK [app : Remember which release was live before this run] *******************
+[2026-10-25T10:03:12.723Z] ok: [vi-node1]
+[2026-10-25T10:03:12.985Z] 
+[2026-10-25T10:03:12.985Z] TASK [app : Create release folder 1.3.4] ***************************************
+[2026-10-25T10:03:12.985Z] changed: [vi-node1]
+[2026-10-25T10:03:19.563Z] 
+[2026-10-25T10:03:19.564Z] TASK [app : Copy application jar] **********************************************
+[2026-10-25T10:03:19.564Z] changed: [vi-node1]
+[2026-10-25T10:03:19.564Z] 
+[2026-10-25T10:03:19.564Z] TASK [app : Point 'current' at the new release] ********************************
+[2026-10-25T10:03:19.564Z] changed: [vi-node1]
+[2026-10-25T10:03:22.098Z] 
+[2026-10-25T10:03:22.098Z] TASK [app : Restart the application for the new release] ***********************
+[2026-10-25T10:03:22.098Z] changed: [vi-node1]
+[2026-10-25T10:03:24.643Z] 
+[2026-10-25T10:03:24.643Z] TASK [app : Ensure the application is running] *********************************
+[2026-10-25T10:03:24.643Z] ok: [vi-node1]
+[2026-10-25T10:03:24.643Z] 
+[2026-10-25T10:03:24.643Z] TASK [Health check new release] ************************************************
+[2026-10-25T10:03:24.643Z] included: verify for vi-node1
+[2026-10-25T10:03:26.556Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (40 retries left).
+[2026-10-25T10:03:31.962Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (39 retries left).
+[2026-10-25T10:03:37.266Z] 
+[2026-10-25T10:03:37.266Z] TASK [verify : Wait for /actuator/health through Nginx to report UP] ***********
+[2026-10-25T10:03:37.266Z] ok: [vi-node1]
+[2026-10-25T10:03:37.846Z] 
+[2026-10-25T10:03:37.846Z] TASK [verify : Read deployed version] ******************************************
+[2026-10-25T10:03:37.846Z] ok: [vi-node1]
+[2026-10-25T10:03:37.846Z] 
+[2026-10-25T10:03:37.846Z] TASK [verify : Health check result] ********************************************
+[2026-10-25T10:03:37.846Z] ok: [vi-node1] => 
+[2026-10-25T10:03:37.846Z]     msg:
+[2026-10-25T10:03:37.846Z]     - 'Node:      vi-node1'
+[2026-10-25T10:03:37.846Z]     - 'Release:   1.3.4'
+[2026-10-25T10:03:37.846Z]     - 'Health:    UP'
+[2026-10-25T10:03:37.846Z]     - 'Database:  UP'
+[2026-10-25T10:03:37.846Z]     - 'URL on PC: http://localhost:8095/'
+[2026-10-25T10:03:37.846Z] 
+[2026-10-25T10:03:37.846Z] PLAY RECAP *********************************************************************
+[2026-10-25T10:03:37.846Z] localhost                  : ok=4    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+[2026-10-25T10:03:37.846Z] vi-node1                   : ok=28   changed=17   unreachable=0    failed=0    skipped=3    rescued=0    ignored=0   
+[2026-10-25T10:03:37.846Z] 
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Idempotency Check)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withCredentials
+[2026-10-25T10:03:44.759Z] Masking supported pattern matches of %DB_PASSWORD%
+[Pipeline] {
+[Pipeline] bat
+[2026-10-25T10:03:45.245Z] 
+[2026-10-25T10:03:45.245Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Provisioning>powershell -NoProfile -ExecutionPolicy Bypass -File ansible\run-ansible.ps1 -Playbook site.yml -AppVersion 1.3.4 -LogFile ansible-logs\02-idempotency-rerun.log 
+[2026-10-25T10:03:45.818Z] > docker compose -f ansible/docker-compose.yml run --rm -T -e ANSIBLE_FORCE_COLOR=0 ansible ansible-playbook playbooks/site.yml 
+[2026-10-25T10:03:46.082Z]  Container ansible-ansible-run-86ff6db286c2 Creating 
+[2026-10-25T10:03:46.082Z]  Container ansible-ansible-run-86ff6db286c2 Created 
+[2026-10-25T10:03:49.366Z] 
+[2026-10-25T10:03:49.366Z] PLAY [Provision infrastructure (network, database, clean target node)] *********
+[2026-10-25T10:03:50.326Z] 
+[2026-10-25T10:03:50.326Z] TASK [provision : Create the Docker network for the environment] ***************
+[2026-10-25T10:03:50.326Z] ok: [localhost]
+[2026-10-25T10:03:51.710Z] 
+[2026-10-25T10:03:51.710Z] TASK [provision : Run the MySQL database container] ****************************
+[2026-10-25T10:03:51.710Z] ok: [localhost]
+[2026-10-25T10:03:52.655Z] 
+[2026-10-25T10:03:52.655Z] TASK [provision : Wait until MySQL accepts TCP connections] ********************
+[2026-10-25T10:03:52.655Z] ok: [localhost]
+[2026-10-25T10:03:54.106Z] 
+[2026-10-25T10:03:54.106Z] TASK [provision : Provision the target node from a clean image (ubuntu:22.04)] ***
+[2026-10-25T10:03:54.106Z] ok: [localhost] => (item=vi-node1)
+[2026-10-25T10:03:54.439Z] 
+[2026-10-25T10:03:54.439Z] PLAY [Configure target node prerequisites] *************************************
+[2026-10-25T10:03:55.423Z] 
+[2026-10-25T10:03:55.423Z] TASK [bootstrap : Install Python on the node if it is missing] *****************
+[2026-10-25T10:03:55.423Z] ok: [vi-node1]
+[2026-10-25T10:03:56.809Z] 
+[2026-10-25T10:03:56.809Z] TASK [bootstrap : Gather facts] ************************************************
+[2026-10-25T10:03:56.809Z] ok: [vi-node1]
+[2026-10-25T10:04:06.815Z] 
+[2026-10-25T10:04:06.816Z] TASK [common : Install required packages] **************************************
+[2026-10-25T10:04:06.816Z] ok: [vi-node1]
+[2026-10-25T10:04:06.816Z] 
+[2026-10-25T10:04:06.816Z] TASK [common : Create application group] ***************************************
+[2026-10-25T10:04:06.816Z] ok: [vi-node1]
+[2026-10-25T10:04:06.816Z] 
+[2026-10-25T10:04:06.816Z] TASK [common : Create application user (no login shell)] ***********************
+[2026-10-25T10:04:06.816Z] ok: [vi-node1]
+[2026-10-25T10:04:07.072Z] 
+[2026-10-25T10:04:07.073Z] TASK [common : Create application folders] *************************************
+[2026-10-25T10:04:07.073Z] ok: [vi-node1] => (item={'path': '/opt/vehicle-inspection', 'owner': 'root', 'mode': '0755'})
+[2026-10-25T10:04:07.336Z] ok: [vi-node1] => (item={'path': '/opt/vehicle-inspection/releases', 'owner': 'root', 'mode': '0755'})
+[2026-10-25T10:04:08.265Z] ok: [vi-node1] => (item={'path': '/opt/vehicle-inspection/logs', 'owner': 'vehicleapp', 'mode': '0750'})
+[2026-10-25T10:04:09.515Z] ok: [vi-node1] => (item={'path': '/etc/vehicle-inspection', 'owner': 'root', 'mode': '0750'})
+[2026-10-25T10:04:12.930Z] 
+[2026-10-25T10:04:12.930Z] TASK [common : Write application environment file] *****************************
+[2026-10-25T10:04:12.930Z] ok: [vi-node1]
+[2026-10-25T10:04:17.412Z] 
+[2026-10-25T10:04:17.412Z] TASK [common : Install the application service script] *************************
+[2026-10-25T10:04:17.412Z] ok: [vi-node1]
+[2026-10-25T10:04:17.672Z] 
+[2026-10-25T10:04:17.672Z] TASK [common : Enable the application service at boot] *************************
+[2026-10-25T10:04:17.672Z] ok: [vi-node1]
+[2026-10-25T10:04:18.245Z] 
+[2026-10-25T10:04:18.245Z] TASK [nginx : Configure Nginx as reverse proxy for the app (port 80 -> 8080)] ***
+[2026-10-25T10:04:18.245Z] ok: [vi-node1]
+[2026-10-25T10:04:18.816Z] 
+[2026-10-25T10:04:18.816Z] TASK [nginx : Enable the site] *************************************************
+[2026-10-25T10:04:18.816Z] ok: [vi-node1]
+[2026-10-25T10:04:19.080Z] 
+[2026-10-25T10:04:19.080Z] TASK [nginx : Disable the default site] ****************************************
+[2026-10-25T10:04:19.080Z] ok: [vi-node1]
+[2026-10-25T10:04:19.343Z] 
+[2026-10-25T10:04:19.343Z] TASK [nginx : Validate Nginx configuration] ************************************
+[2026-10-25T10:04:19.343Z] ok: [vi-node1]
+[2026-10-25T10:04:19.603Z] 
+[2026-10-25T10:04:19.603Z] TASK [nginx : Ensure Nginx is running and enabled] *****************************
+[2026-10-25T10:04:19.603Z] ok: [vi-node1]
+[2026-10-25T10:04:19.603Z] 
+[2026-10-25T10:04:19.603Z] PLAY [Deploy the application (automatic rollback on failed health check)] ******
+[2026-10-25T10:04:20.558Z] 
+[2026-10-25T10:04:20.558Z] TASK [app : Work out release paths] ********************************************
+[2026-10-25T10:04:20.558Z] ok: [vi-node1]
+[2026-10-25T10:04:20.819Z] 
+[2026-10-25T10:04:20.819Z] TASK [app : Read the currently deployed release] *******************************
+[2026-10-25T10:04:20.819Z] ok: [vi-node1]
+[2026-10-25T10:04:20.819Z] 
+[2026-10-25T10:04:20.819Z] TASK [app : Remember which release was live before this run] *******************
+[2026-10-25T10:04:20.819Z] ok: [vi-node1]
+[2026-10-25T10:04:21.391Z] 
+[2026-10-25T10:04:21.391Z] TASK [app : Create release folder 1.3.4] ***************************************
+[2026-10-25T10:04:21.391Z] ok: [vi-node1]
+[2026-10-25T10:04:26.724Z] 
+[2026-10-25T10:04:26.724Z] TASK [app : Copy application jar] **********************************************
+[2026-10-25T10:04:26.724Z] ok: [vi-node1]
+[2026-10-25T10:04:26.987Z] 
+[2026-10-25T10:04:26.987Z] TASK [app : Point 'current' at the new release] ********************************
+[2026-10-25T10:04:26.987Z] ok: [vi-node1]
+[2026-10-25T10:04:27.249Z] 
+[2026-10-25T10:04:27.249Z] TASK [app : Ensure the application is running] *********************************
+[2026-10-25T10:04:27.249Z] ok: [vi-node1]
+[2026-10-25T10:04:27.249Z] 
+[2026-10-25T10:04:27.249Z] TASK [Health check new release] ************************************************
+[2026-10-25T10:04:27.512Z] included: verify for vi-node1
+[2026-10-25T10:04:28.462Z] 
+[2026-10-25T10:04:28.462Z] TASK [verify : Wait for /actuator/health through Nginx to report UP] ***********
+[2026-10-25T10:04:28.462Z] ok: [vi-node1]
+[2026-10-25T10:04:28.723Z] 
+[2026-10-25T10:04:28.723Z] TASK [verify : Read deployed version] ******************************************
+[2026-10-25T10:04:28.723Z] ok: [vi-node1]
+[2026-10-25T10:04:28.987Z] 
+[2026-10-25T10:04:28.988Z] TASK [verify : Health check result] ********************************************
+[2026-10-25T10:04:28.988Z] ok: [vi-node1] => 
+[2026-10-25T10:04:28.988Z]     msg:
+[2026-10-25T10:04:28.988Z]     - 'Node:      vi-node1'
+[2026-10-25T10:04:28.988Z]     - 'Release:   1.3.4'
+[2026-10-25T10:04:28.988Z]     - 'Health:    UP'
+[2026-10-25T10:04:28.988Z]     - 'Database:  UP'
+[2026-10-25T10:04:28.988Z]     - 'URL on PC: http://localhost:8095/'
+[2026-10-25T10:04:28.988Z] 
+[2026-10-25T10:04:28.988Z] PLAY RECAP *********************************************************************
+[2026-10-25T10:04:28.988Z] localhost                  : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+[2026-10-25T10:04:28.988Z] vi-node1                   : ok=25   changed=0    unreachable=0    failed=0    skipped=3    rescued=0    ignored=0   
+[2026-10-25T10:04:28.988Z] 
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] powershell
+[2026-10-25T10:04:33.918Z] IDEMPOTENT: second run reported changed=0 on every host.
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Health Check)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withCredentials
+[2026-10-25T10:04:34.923Z] Masking supported pattern matches of %DB_PASSWORD%
+[Pipeline] {
+[Pipeline] bat
+[2026-10-25T10:04:35.315Z] 
+[2026-10-25T10:04:35.316Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Provisioning>powershell -NoProfile -ExecutionPolicy Bypass -File ansible\run-ansible.ps1 -Playbook health.yml -LogFile ansible-logs\03-health.log 
+[2026-10-25T10:04:36.842Z] > docker compose -f ansible/docker-compose.yml run --rm -T -e ANSIBLE_FORCE_COLOR=0 ansible ansible-playbook playbooks/health.yml 
+[2026-10-25T10:04:39.218Z]  Container ansible-ansible-run-4cefc2be5436 Creating 
+[2026-10-25T10:04:39.218Z]  Container ansible-ansible-run-4cefc2be5436 Created 
+[2026-10-25T10:04:42.513Z] 
+[2026-10-25T10:04:42.513Z] PLAY [Health check] ************************************************************
+[2026-10-25T10:04:43.085Z] 
+[2026-10-25T10:04:43.085Z] TASK [verify : Wait for /actuator/health through Nginx to report UP] ***********
+[2026-10-25T10:04:43.085Z] ok: [vi-node1]
+[2026-10-25T10:04:43.347Z] 
+[2026-10-25T10:04:43.347Z] TASK [verify : Read deployed version] ******************************************
+[2026-10-25T10:04:43.347Z] ok: [vi-node1]
+[2026-10-25T10:04:43.347Z] 
+[2026-10-25T10:04:43.347Z] TASK [verify : Health check result] ********************************************
+[2026-10-25T10:04:43.347Z] ok: [vi-node1] => 
+[2026-10-25T10:04:43.347Z]     msg:
+[2026-10-25T10:04:43.347Z]     - 'Node:      vi-node1'
+[2026-10-25T10:04:43.347Z]     - 'Release:   1.3.4'
+[2026-10-25T10:04:43.347Z]     - 'Health:    UP'
+[2026-10-25T10:04:43.347Z]     - 'Database:  UP'
+[2026-10-25T10:04:43.347Z]     - 'URL on PC: http://localhost:8095/'
+[2026-10-25T10:04:43.347Z] 
+[2026-10-25T10:04:43.347Z] PLAY RECAP *********************************************************************
+[2026-10-25T10:04:43.347Z] vi-node1                   : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+[2026-10-25T10:04:43.347Z] 
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] bat
+[2026-10-25T10:04:44.468Z] 
+[2026-10-25T10:04:44.469Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Provisioning>powershell -NoProfile -ExecutionPolicy Bypass -File deploy\windows\wait-for-health.ps1 -Url http://localhost:8095/actuator/health -TimeoutSeconds 60 
+[2026-10-25T10:04:48.694Z] Health check passed: http://localhost:8095/actuator/health -> UP
+[2026-10-25T10:04:48.694Z] {
+[2026-10-25T10:04:48.694Z]     "status":  "UP",
+[2026-10-25T10:04:48.694Z]     "components":  {
+[2026-10-25T10:04:48.694Z]                        "db":  {
+[2026-10-25T10:04:48.694Z]                                   "status":  "UP",
+[2026-10-25T10:04:48.694Z]                                   "details":  {
+[2026-10-25T10:04:48.694Z]                                                   "database":  "MySQL",
+[2026-10-25T10:04:48.694Z]                                                   "validationQuery":  "isValid()"
+[2026-10-25T10:04:48.694Z]                                               }
+[2026-10-25T10:04:48.694Z]                               },
+[2026-10-25T10:04:48.694Z]                        "diskSpace":  {
+[2026-10-25T10:04:48.694Z]                                          "status":  "UP",
+[2026-10-25T10:04:48.694Z]                                          "details":  {
+[2026-10-25T10:04:48.694Z]                                                          "total":  1081101176832,
+[2026-10-25T10:04:48.694Z]                                                          "free":  1018869497856,
+[2026-10-25T10:04:48.694Z]                                                          "threshold":  10485760,
+[2026-10-25T10:04:48.694Z]                                                          "path":  "/opt/vehicle-inspection/.",
+[2026-10-25T10:04:48.694Z]                                                          "exists":  true
+[2026-10-25T10:04:48.694Z]                                                      }
+[2026-10-25T10:04:48.694Z]                                      },
+[2026-10-25T10:04:48.694Z]                        "ping":  {
+[2026-10-25T10:04:48.694Z]                                     "status":  "UP"
+[2026-10-25T10:04:48.694Z]                                 },
+[2026-10-25T10:04:48.694Z]                        "ssl":  {
+[2026-10-25T10:04:48.694Z]                                    "status":  "UP",
+[2026-10-25T10:04:48.694Z]                                    "details":  {
+[2026-10-25T10:04:48.694Z]                                                    "validChains":  [
+[2026-10-25T10:04:48.694Z] 
+[2026-10-25T10:04:48.694Z]                                                                    ],
+[2026-10-25T10:04:48.694Z]                                                    "invalidChains":  [
+[2026-10-25T10:04:48.694Z] 
+[2026-10-25T10:04:48.694Z]                                                                      ]
+[2026-10-25T10:04:48.694Z]                                                }
+[2026-10-25T10:04:48.694Z]                                }
+[2026-10-25T10:04:48.694Z]                    }
+[2026-10-25T10:04:48.694Z] }
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Rollback & Recovery)
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] tool
+[Pipeline] envVarsForTool
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withCredentials
+[2026-10-25T10:04:49.504Z] Masking supported pattern matches of %DB_PASSWORD%
+[Pipeline] {
+[Pipeline] bat
+[2026-10-25T10:04:49.900Z] 
+[2026-10-25T10:04:49.900Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Provisioning>powershell -NoProfile -ExecutionPolicy Bypass -File ansible\run-ansible.ps1 -Playbook deploy.yml -AppVersion 1.3.4-hotfix -LogFile ansible-logs\04-deploy-v2.log 
+[2026-10-25T10:04:50.473Z] > docker compose -f ansible/docker-compose.yml run --rm -T -e ANSIBLE_FORCE_COLOR=0 ansible ansible-playbook playbooks/deploy.yml 
+[2026-10-25T10:04:50.732Z]  Container ansible-ansible-run-a101f099e1f8 Creating 
+[2026-10-25T10:04:50.993Z]  Container ansible-ansible-run-a101f099e1f8 Created 
+[2026-10-25T10:04:52.911Z] 
+[2026-10-25T10:04:52.911Z] PLAY [Deploy the application (automatic rollback on failed health check)] ******
+[2026-10-25T10:04:53.182Z] 
+[2026-10-25T10:04:53.182Z] TASK [app : Work out release paths] ********************************************
+[2026-10-25T10:04:53.182Z] ok: [vi-node1]
+[2026-10-25T10:04:54.140Z] 
+[2026-10-25T10:04:54.140Z] TASK [app : Read the currently deployed release] *******************************
+[2026-10-25T10:04:54.140Z] ok: [vi-node1]
+[2026-10-25T10:04:54.140Z] 
+[2026-10-25T10:04:54.140Z] TASK [app : Remember which release was live before this run] *******************
+[2026-10-25T10:04:54.140Z] ok: [vi-node1]
+[2026-10-25T10:04:56.231Z] 
+[2026-10-25T10:04:56.231Z] TASK [app : Create release folder 1.3.4-hotfix] ********************************
+[2026-10-25T10:04:56.231Z] changed: [vi-node1]
+[2026-10-25T10:05:06.260Z] 
+[2026-10-25T10:05:06.261Z] TASK [app : Copy application jar] **********************************************
+[2026-10-25T10:05:06.261Z] changed: [vi-node1]
+[2026-10-25T10:05:06.261Z] 
+[2026-10-25T10:05:06.261Z] TASK [app : Record the previous release for rollback] **************************
+[2026-10-25T10:05:06.261Z] changed: [vi-node1]
+[2026-10-25T10:05:06.525Z] 
+[2026-10-25T10:05:06.525Z] TASK [app : Point 'current' at the new release] ********************************
+[2026-10-25T10:05:06.525Z] changed: [vi-node1]
+[2026-10-25T10:05:14.643Z] 
+[2026-10-25T10:05:14.643Z] TASK [app : Restart the application for the new release] ***********************
+[2026-10-25T10:05:14.643Z] changed: [vi-node1]
+[2026-10-25T10:05:14.643Z] 
+[2026-10-25T10:05:14.643Z] TASK [app : Ensure the application is running] *********************************
+[2026-10-25T10:05:14.643Z] ok: [vi-node1]
+[2026-10-25T10:05:14.643Z] 
+[2026-10-25T10:05:14.643Z] TASK [Health check new release] ************************************************
+[2026-10-25T10:05:14.643Z] included: verify for vi-node1
+[2026-10-25T10:05:14.900Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (40 retries left).
+[2026-10-25T10:05:20.179Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (39 retries left).
+[2026-10-25T10:05:26.834Z] 
+[2026-10-25T10:05:26.834Z] TASK [verify : Wait for /actuator/health through Nginx to report UP] ***********
+[2026-10-25T10:05:26.834Z] ok: [vi-node1]
+[2026-10-25T10:05:27.410Z] 
+[2026-10-25T10:05:27.410Z] TASK [verify : Read deployed version] ******************************************
+[2026-10-25T10:05:27.410Z] ok: [vi-node1]
+[2026-10-25T10:05:27.410Z] 
+[2026-10-25T10:05:27.410Z] TASK [verify : Health check result] ********************************************
+[2026-10-25T10:05:27.410Z] ok: [vi-node1] => 
+[2026-10-25T10:05:27.410Z]     msg:
+[2026-10-25T10:05:27.410Z]     - 'Node:      vi-node1'
+[2026-10-25T10:05:27.410Z]     - 'Release:   1.3.4-hotfix'
+[2026-10-25T10:05:27.410Z]     - 'Health:    UP'
+[2026-10-25T10:05:27.410Z]     - 'Database:  UP'
+[2026-10-25T10:05:27.410Z]     - 'URL on PC: http://localhost:8095/'
+[2026-10-25T10:05:27.410Z] 
+[2026-10-25T10:05:27.410Z] PLAY RECAP *********************************************************************
+[2026-10-25T10:05:27.410Z] vi-node1                   : ok=13   changed=5    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+[2026-10-25T10:05:27.410Z] 
+[Pipeline] bat
+[2026-10-25T10:05:28.316Z] 
+[2026-10-25T10:05:28.316Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Provisioning>powershell -NoProfile -ExecutionPolicy Bypass -File ansible\run-ansible.ps1 -Playbook rollback.yml -LogFile ansible-logs\05-manual-rollback.log 
+[2026-10-25T10:05:28.891Z] > docker compose -f ansible/docker-compose.yml run --rm -T -e ANSIBLE_FORCE_COLOR=0 ansible ansible-playbook playbooks/rollback.yml 
+[2026-10-25T10:05:29.155Z]  Container ansible-ansible-run-f74579fef372 Creating 
+[2026-10-25T10:05:29.155Z]  Container ansible-ansible-run-f74579fef372 Created 
+[2026-10-25T10:05:30.538Z] 
+[2026-10-25T10:05:30.538Z] PLAY [Roll back to the previous stable release] ********************************
+[2026-10-25T10:05:31.958Z] 
+[2026-10-25T10:05:31.958Z] TASK [Read the recorded previous release] **************************************
+[2026-10-25T10:05:31.958Z] ok: [vi-node1]
+[2026-10-25T10:05:33.413Z] 
+[2026-10-25T10:05:33.413Z] TASK [Read the current release] ************************************************
+[2026-10-25T10:05:33.413Z] ok: [vi-node1]
+[2026-10-25T10:05:33.413Z] 
+[2026-10-25T10:05:33.413Z] TASK [Decide rollback target] **************************************************
+[2026-10-25T10:05:33.413Z] ok: [vi-node1]
+[2026-10-25T10:05:33.979Z] 
+[2026-10-25T10:05:33.979Z] TASK [Check the target release still exists] ***********************************
+[2026-10-25T10:05:33.979Z] ok: [vi-node1]
+[2026-10-25T10:05:33.979Z] 
+[2026-10-25T10:05:33.979Z] TASK [Show plan] ***************************************************************
+[2026-10-25T10:05:33.979Z] ok: [vi-node1] => 
+[2026-10-25T10:05:33.979Z]     msg: Rolling back 1.3.4-hotfix -> 1.3.4
+[2026-10-25T10:05:34.552Z] 
+[2026-10-25T10:05:34.552Z] TASK [Point 'current' at the previous release] *********************************
+[2026-10-25T10:05:34.552Z] changed: [vi-node1]
+[2026-10-25T10:05:35.496Z] 
+[2026-10-25T10:05:35.496Z] TASK [Remember the release we rolled back from] ********************************
+[2026-10-25T10:05:35.496Z] changed: [vi-node1]
+[2026-10-25T10:05:38.040Z] 
+[2026-10-25T10:05:38.040Z] TASK [Restart the application] *************************************************
+[2026-10-25T10:05:38.040Z] changed: [vi-node1]
+[2026-10-25T10:05:38.040Z] 
+[2026-10-25T10:05:38.040Z] TASK [Verify recovered release] ************************************************
+[2026-10-25T10:05:38.306Z] included: verify for vi-node1
+[2026-10-25T10:05:39.686Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (40 retries left).
+[2026-10-25T10:05:44.962Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (39 retries left).
+[2026-10-25T10:05:49.276Z] 
+[2026-10-25T10:05:49.276Z] TASK [verify : Wait for /actuator/health through Nginx to report UP] ***********
+[2026-10-25T10:05:49.276Z] ok: [vi-node1]
+[2026-10-25T10:05:49.276Z] 
+[2026-10-25T10:05:49.276Z] TASK [verify : Read deployed version] ******************************************
+[2026-10-25T10:05:49.276Z] ok: [vi-node1]
+[2026-10-25T10:05:49.276Z] 
+[2026-10-25T10:05:49.276Z] TASK [verify : Health check result] ********************************************
+[2026-10-25T10:05:49.276Z] ok: [vi-node1] => 
+[2026-10-25T10:05:49.276Z]     msg:
+[2026-10-25T10:05:49.276Z]     - 'Node:      vi-node1'
+[2026-10-25T10:05:49.276Z]     - 'Release:   1.3.4'
+[2026-10-25T10:05:49.276Z]     - 'Health:    UP'
+[2026-10-25T10:05:49.276Z]     - 'Database:  UP'
+[2026-10-25T10:05:49.276Z]     - 'URL on PC: http://localhost:8095/'
+[2026-10-25T10:05:49.276Z] 
+[2026-10-25T10:05:49.276Z] PLAY RECAP *********************************************************************
+[2026-10-25T10:05:49.276Z] vi-node1                   : ok=12   changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+[2026-10-25T10:05:49.276Z] 
+[Pipeline] bat
+[2026-10-25T10:05:50.178Z] 
+[2026-10-25T10:05:50.178Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Provisioning>powershell -NoProfile -ExecutionPolicy Bypass -File ansible\run-ansible.ps1 -Playbook deploy.yml -AppVersion 1.3.4-broken -ExtraArgs "-e simulate_bad_release=true" -LogFile ansible-logs\06-auto-rollback.log 
+[2026-10-25T10:05:50.754Z] > docker compose -f ansible/docker-compose.yml run --rm -T -e ANSIBLE_FORCE_COLOR=0 ansible ansible-playbook playbooks/deploy.yml -e simulate_bad_release=true
+[2026-10-25T10:05:51.015Z]  Container ansible-ansible-run-9e8b73073e51 Creating 
+[2026-10-25T10:05:51.279Z]  Container ansible-ansible-run-9e8b73073e51 Created 
+[2026-10-25T10:05:53.865Z] 
+[2026-10-25T10:05:53.865Z] PLAY [Deploy the application (automatic rollback on failed health check)] ******
+[2026-10-25T10:05:53.865Z] 
+[2026-10-25T10:05:53.865Z] TASK [app : Work out release paths] ********************************************
+[2026-10-25T10:05:53.865Z] ok: [vi-node1]
+[2026-10-25T10:05:54.838Z] 
+[2026-10-25T10:05:54.838Z] TASK [app : Read the currently deployed release] *******************************
+[2026-10-25T10:05:54.838Z] ok: [vi-node1]
+[2026-10-25T10:05:54.838Z] 
+[2026-10-25T10:05:54.838Z] TASK [app : Remember which release was live before this run] *******************
+[2026-10-25T10:05:54.838Z] ok: [vi-node1]
+[2026-10-25T10:05:55.413Z] 
+[2026-10-25T10:05:55.413Z] TASK [app : Create release folder 1.3.4-broken] ********************************
+[2026-10-25T10:05:55.413Z] changed: [vi-node1]
+[2026-10-25T10:05:56.357Z] 
+[2026-10-25T10:05:56.357Z] TASK [app : Copy a deliberately corrupt jar (rollback demonstration)] **********
+[2026-10-25T10:05:56.357Z] changed: [vi-node1]
+[2026-10-25T10:05:57.300Z] 
+[2026-10-25T10:05:57.300Z] TASK [app : Record the previous release for rollback] **************************
+[2026-10-25T10:05:57.300Z] changed: [vi-node1]
+[2026-10-25T10:05:57.563Z] 
+[2026-10-25T10:05:57.563Z] TASK [app : Point 'current' at the new release] ********************************
+[2026-10-25T10:05:57.563Z] changed: [vi-node1]
+[2026-10-25T10:06:00.865Z] 
+[2026-10-25T10:06:00.865Z] TASK [app : Restart the application for the new release] ***********************
+[2026-10-25T10:06:00.865Z] changed: [vi-node1]
+[2026-10-25T10:06:01.440Z] 
+[2026-10-25T10:06:01.440Z] TASK [app : Ensure the application is running] *********************************
+[2026-10-25T10:06:01.440Z] changed: [vi-node1]
+[2026-10-25T10:06:01.440Z] 
+[2026-10-25T10:06:01.440Z] TASK [Health check new release] ************************************************
+[2026-10-25T10:06:01.440Z] included: verify for vi-node1
+[2026-10-25T10:06:02.390Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (40 retries left).
+[2026-10-25T10:06:07.766Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (39 retries left).
+[2026-10-25T10:06:13.080Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (38 retries left).
+[2026-10-25T10:06:18.364Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (37 retries left).
+[2026-10-25T10:06:25.091Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (36 retries left).
+[2026-10-25T10:06:28.387Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (35 retries left).
+[2026-10-25T10:06:33.671Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (34 retries left).
+[2026-10-25T10:06:39.049Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (33 retries left).
+[2026-10-25T10:06:44.328Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (32 retries left).
+[2026-10-25T10:06:49.588Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (31 retries left).
+[2026-10-25T10:06:53.781Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (30 retries left).
+[2026-10-25T10:06:59.121Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (29 retries left).
+[2026-10-25T10:07:05.726Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (28 retries left).
+[2026-10-25T10:07:09.925Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (27 retries left).
+[2026-10-25T10:07:14.109Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (26 retries left).
+[2026-10-25T10:07:18.314Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (25 retries left).
+[2026-10-25T10:07:23.635Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (24 retries left).
+[2026-10-25T10:07:27.833Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (23 retries left).
+[2026-10-25T10:07:33.111Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (22 retries left).
+[2026-10-25T10:07:37.319Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (21 retries left).
+[2026-10-25T10:07:42.580Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (20 retries left).
+[2026-10-25T10:07:46.768Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (19 retries left).
+[2026-10-25T10:07:50.952Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (18 retries left).
+[2026-10-25T10:07:56.252Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (17 retries left).
+[2026-10-25T10:08:01.513Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (16 retries left).
+[2026-10-25T10:08:05.739Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (15 retries left).
+[2026-10-25T10:08:11.011Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (14 retries left).
+[2026-10-25T10:08:16.288Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (13 retries left).
+[2026-10-25T10:08:21.656Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (12 retries left).
+[2026-10-25T10:08:26.931Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (11 retries left).
+[2026-10-25T10:08:32.257Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (10 retries left).
+[2026-10-25T10:08:36.468Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (9 retries left).
+[2026-10-25T10:08:40.662Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (8 retries left).
+[2026-10-25T10:08:45.935Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (7 retries left).
+[2026-10-25T10:08:52.544Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (6 retries left).
+[2026-10-25T10:08:56.775Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (5 retries left).
+[2026-10-25T10:09:00.955Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (4 retries left).
+[2026-10-25T10:09:06.231Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (3 retries left).
+[2026-10-25T10:09:10.430Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (2 retries left).
+[2026-10-25T10:09:15.716Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (1 retries left).
+[2026-10-25T10:09:19.924Z] 
+[2026-10-25T10:09:19.924Z] TASK [verify : Wait for /actuator/health through Nginx to report UP] ***********
+[2026-10-25T10:09:19.924Z] fatal: [vi-node1]: FAILED! => 
+[2026-10-25T10:09:19.924Z]     attempts: 40
+[2026-10-25T10:09:19.924Z]     changed: false
+[2026-10-25T10:09:19.924Z]     connection: close
+[2026-10-25T10:09:19.924Z]     content: |-
+[2026-10-25T10:09:19.924Z]         <html>
+[2026-10-25T10:09:19.924Z]         <head><title>502 Bad Gateway</title></head>
+[2026-10-25T10:09:19.924Z]         <body>
+[2026-10-25T10:09:19.924Z]         <center><h1>502 Bad Gateway</h1></center>
+[2026-10-25T10:09:19.924Z]         <hr><center>nginx/1.18.0 (Ubuntu)</center>
+[2026-10-25T10:09:19.924Z]         </body>
+[2026-10-25T10:09:19.924Z]         </html>
+[2026-10-25T10:09:19.924Z]     content_length: '166'
+[2026-10-25T10:09:19.924Z]     content_type: text/html
+[2026-10-25T10:09:19.924Z]     date: Sun, 25 Oct 2026 10:09:19 GMT
+[2026-10-25T10:09:19.924Z]     elapsed: 0
+[2026-10-25T10:09:19.924Z]     msg: 'Status code was 502 and not [200]: HTTP Error 502: Bad Gateway'
+[2026-10-25T10:09:19.924Z]     redirected: false
+[2026-10-25T10:09:19.924Z]     server: nginx/1.18.0 (Ubuntu)
+[2026-10-25T10:09:19.924Z]     status: 502
+[2026-10-25T10:09:19.924Z]     url: http://127.0.0.1/actuator/health
+[2026-10-25T10:09:20.189Z] 
+[2026-10-25T10:09:20.189Z] TASK [app : Report failed release] *********************************************
+[2026-10-25T10:09:20.189Z] ok: [vi-node1] => 
+[2026-10-25T10:09:20.189Z]     msg: Release 1.3.4-broken FAILED its health check - rolling back to /opt/vehicle-inspection/releases/1.3.4
+[2026-10-25T10:09:20.769Z] 
+[2026-10-25T10:09:20.769Z] TASK [app : Point 'current' back at the last good release] *********************
+[2026-10-25T10:09:20.769Z] changed: [vi-node1]
+[2026-10-25T10:09:23.324Z] 
+[2026-10-25T10:09:23.324Z] TASK [app : Restart the application on the last good release] ******************
+[2026-10-25T10:09:23.324Z] changed: [vi-node1]
+[2026-10-25T10:09:23.324Z] 
+[2026-10-25T10:09:23.324Z] TASK [Health check after rollback] *********************************************
+[2026-10-25T10:09:23.324Z] included: verify for vi-node1
+[2026-10-25T10:09:24.702Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (40 retries left).
+[2026-10-25T10:09:29.979Z] FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (39 retries left).
+[2026-10-25T10:09:35.293Z] 
+[2026-10-25T10:09:35.293Z] TASK [verify : Wait for /actuator/health through Nginx to report UP] ***********
+[2026-10-25T10:09:35.293Z] ok: [vi-node1]
+[2026-10-25T10:09:35.293Z] 
+[2026-10-25T10:09:35.293Z] TASK [verify : Read deployed version] ******************************************
+[2026-10-25T10:09:35.293Z] ok: [vi-node1]
+[2026-10-25T10:09:35.293Z] 
+[2026-10-25T10:09:35.293Z] TASK [verify : Health check result] ********************************************
+[2026-10-25T10:09:35.293Z] ok: [vi-node1] => 
+[2026-10-25T10:09:35.293Z]     msg:
+[2026-10-25T10:09:35.293Z]     - 'Node:      vi-node1'
+[2026-10-25T10:09:35.293Z]     - 'Release:   1.3.4'
+[2026-10-25T10:09:35.293Z]     - 'Health:    UP'
+[2026-10-25T10:09:35.293Z]     - 'Database:  UP'
+[2026-10-25T10:09:35.293Z]     - 'URL on PC: http://localhost:8095/'
+[2026-10-25T10:09:35.293Z] 
+[2026-10-25T10:09:35.293Z] TASK [app : Remove the failed release] *****************************************
+[2026-10-25T10:09:35.293Z] changed: [vi-node1]
+[2026-10-25T10:09:35.554Z] 
+[2026-10-25T10:09:35.554Z] TASK [app : Rollback summary] **************************************************
+[2026-10-25T10:09:35.554Z] ok: [vi-node1] => 
+[2026-10-25T10:09:35.554Z]     msg: ROLLBACK COMPLETE - 1.3.4 is serving traffic again; 1.3.4-broken was removed.
+[2026-10-25T10:09:35.554Z] 
+[2026-10-25T10:09:35.554Z] PLAY RECAP *********************************************************************
+[2026-10-25T10:09:35.554Z] vi-node1                   : ok=19   changed=9    unreachable=0    failed=0    skipped=2    rescued=1    ignored=0   
+[2026-10-25T10:09:35.554Z] 
+[Pipeline] bat
+[2026-10-25T10:09:36.476Z] 
+[2026-10-25T10:09:36.477Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Provisioning>powershell -NoProfile -ExecutionPolicy Bypass -File ansible\run-ansible.ps1 -Playbook health.yml -LogFile ansible-logs\07-health-after-recovery.log 
+[2026-10-25T10:09:37.411Z] > docker compose -f ansible/docker-compose.yml run --rm -T -e ANSIBLE_FORCE_COLOR=0 ansible ansible-playbook playbooks/health.yml 
+[2026-10-25T10:09:37.984Z]  Container ansible-ansible-run-2ba087f089a9 Creating 
+[2026-10-25T10:09:38.252Z]  Container ansible-ansible-run-2ba087f089a9 Created 
+[2026-10-25T10:09:40.789Z] 
+[2026-10-25T10:09:40.789Z] PLAY [Health check] ************************************************************
+[2026-10-25T10:09:41.359Z] 
+[2026-10-25T10:09:41.359Z] TASK [verify : Wait for /actuator/health through Nginx to report UP] ***********
+[2026-10-25T10:09:41.359Z] ok: [vi-node1]
+[2026-10-25T10:09:41.938Z] 
+[2026-10-25T10:09:41.938Z] TASK [verify : Read deployed version] ******************************************
+[2026-10-25T10:09:41.938Z] ok: [vi-node1]
+[2026-10-25T10:09:42.199Z] 
+[2026-10-25T10:09:42.199Z] TASK [verify : Health check result] ********************************************
+[2026-10-25T10:09:42.199Z] ok: [vi-node1] => 
+[2026-10-25T10:09:42.199Z]     msg:
+[2026-10-25T10:09:42.199Z]     - 'Node:      vi-node1'
+[2026-10-25T10:09:42.200Z]     - 'Release:   1.3.4'
+[2026-10-25T10:09:42.200Z]     - 'Health:    UP'
+[2026-10-25T10:09:42.200Z]     - 'Database:  UP'
+[2026-10-25T10:09:42.200Z]     - 'URL on PC: http://localhost:8095/'
+[2026-10-25T10:09:42.200Z] 
+[2026-10-25T10:09:42.200Z] PLAY RECAP *********************************************************************
+[2026-10-25T10:09:42.200Z] vi-node1                   : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+[2026-10-25T10:09:42.200Z] 
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] bat
+[2026-10-25T10:09:43.736Z] 
+[2026-10-25T10:09:43.736Z] C:\ProgramData\Jenkins\.jenkins\workspace\Vehicle-Inspection-Provisioning>powershell -NoProfile -ExecutionPolicy Bypass -File deploy\windows\wait-for-health.ps1 -Url http://localhost:8095/actuator/health -TimeoutSeconds 60 
+[2026-10-25T10:09:47.039Z] Health check passed: http://localhost:8095/actuator/health -> UP
+[2026-10-25T10:09:47.039Z] {
+[2026-10-25T10:09:47.039Z]     "status":  "UP",
+[2026-10-25T10:09:47.039Z]     "components":  {
+[2026-10-25T10:09:47.039Z]                        "db":  {
+[2026-10-25T10:09:47.039Z]                                   "status":  "UP",
+[2026-10-25T10:09:47.039Z]                                   "details":  {
+[2026-10-25T10:09:47.039Z]                                                   "database":  "MySQL",
+[2026-10-25T10:09:47.039Z]                                                   "validationQuery":  "isValid()"
+[2026-10-25T10:09:47.039Z]                                               }
+[2026-10-25T10:09:47.039Z]                               },
+[2026-10-25T10:09:47.039Z]                        "diskSpace":  {
+[2026-10-25T10:09:47.039Z]                                          "status":  "UP",
+[2026-10-25T10:09:47.039Z]                                          "details":  {
+[2026-10-25T10:09:47.039Z]                                                          "total":  1081101176832,
+[2026-10-25T10:09:47.039Z]                                                          "free":  1018473811968,
+[2026-10-25T10:09:47.039Z]                                                          "threshold":  10485760,
+[2026-10-25T10:09:47.039Z]                                                          "path":  "/opt/vehicle-inspection/.",
+[2026-10-25T10:09:47.039Z]                                                          "exists":  true
+[2026-10-25T10:09:47.039Z]                                                      }
+[2026-10-25T10:09:47.039Z]                                      },
+[2026-10-25T10:09:47.039Z]                        "ping":  {
+[2026-10-25T10:09:47.039Z]                                     "status":  "UP"
+[2026-10-25T10:09:47.039Z]                                 },
+[2026-10-25T10:09:47.039Z]                        "ssl":  {
+[2026-10-25T10:09:47.039Z]                                    "status":  "UP",
+[2026-10-25T10:09:47.039Z]                                    "details":  {
+[2026-10-25T10:09:47.039Z]                                                    "validChains":  [
+[2026-10-25T10:09:47.039Z] 
+[2026-10-25T10:09:47.039Z]                                                                    ],
+[2026-10-25T10:09:47.039Z]                                                    "invalidChains":  [
+[2026-10-25T10:09:47.039Z] 
+[2026-10-25T10:09:47.039Z]                                                                      ]
+[2026-10-25T10:09:47.039Z]                                                }
+[2026-10-25T10:09:47.039Z]                                }
+[2026-10-25T10:09:47.039Z]                    }
+[2026-10-25T10:09:47.039Z] }
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] archiveArtifacts
+[2026-10-25T10:09:47.520Z] Archiving artifacts
+[Pipeline] echo
+[2026-10-25T10:09:47.595Z] Provisioned, idempotent, healthy and recoverable - http://localhost:8095/
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // timestamps
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS

@@ -1,0 +1,23 @@
+- name: Wait for /actuator/health through Nginx to report UP
+  ansible.builtin.uri:
+    url: "{{ health_url }}"
+    return_content: true
+    status_code: 200
+  register: health
+  until: health.status == 200 and (health.json.status | default('')) == 'UP'
+  retries: "{{ health_retries }}"
+  delay: "{{ health_delay }}"
+
+- name: Read deployed version
+  ansible.builtin.command: readlink -f {{ app_home }}/current
+  register: active_release
+  changed_when: false
+
+- name: Health check result
+  ansible.builtin.debug:
+    msg:
+      - "Node:      {{ inventory_hostname }}"
+      - "Release:   {{ active_release.stdout | basename }}"
+      - "Health:    {{ health.json.status }}"
+      - "Database:  {{ health.json.components.db.status | default('n/a') }}"
+      - "URL on PC: http://localhost:{{ node_http_port }}/"

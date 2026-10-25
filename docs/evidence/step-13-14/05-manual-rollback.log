@@ -1,0 +1,55 @@
+> docker compose -f ansible/docker-compose.yml run --rm -T -e ANSIBLE_FORCE_COLOR=0 ansible ansible-playbook playbooks/rollback.yml 
+
+ Container ansible-ansible-run-f74579fef372 Creating 
+ Container ansible-ansible-run-f74579fef372 Created 
+
+PLAY [Roll back to the previous stable release] ********************************
+
+TASK [Read the recorded previous release] **************************************
+ok: [vi-node1]
+
+TASK [Read the current release] ************************************************
+ok: [vi-node1]
+
+TASK [Decide rollback target] **************************************************
+ok: [vi-node1]
+
+TASK [Check the target release still exists] ***********************************
+ok: [vi-node1]
+
+TASK [Show plan] ***************************************************************
+ok: [vi-node1] => 
+    msg: Rolling back 1.3.4-hotfix -> 1.3.4
+
+TASK [Point 'current' at the previous release] *********************************
+changed: [vi-node1]
+
+TASK [Remember the release we rolled back from] ********************************
+changed: [vi-node1]
+
+TASK [Restart the application] *************************************************
+changed: [vi-node1]
+
+TASK [Verify recovered release] ************************************************
+included: verify for vi-node1
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (40 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (39 retries left).
+
+TASK [verify : Wait for /actuator/health through Nginx to report UP] ***********
+ok: [vi-node1]
+
+TASK [verify : Read deployed version] ******************************************
+ok: [vi-node1]
+
+TASK [verify : Health check result] ********************************************
+ok: [vi-node1] => 
+    msg:
+    - 'Node:      vi-node1'
+    - 'Release:   1.3.4'
+    - 'Health:    UP'
+    - 'Database:  UP'
+    - 'URL on PC: http://localhost:8095/'
+
+PLAY RECAP *********************************************************************
+vi-node1                   : ok=12   changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+

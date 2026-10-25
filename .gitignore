@@ -1,4 +1,4 @@
-﻿# Maven
+# Maven
 target/
 *.class
 
@@ -34,3 +34,15 @@ screenshots/
 # Temporary
 *.tmp
 *.temp
+
+# Evidence logs are deliverables - keep them
+!docs/evidence/**
+
+# Pipeline / Ansible run output
+test-run/
+ansible-logs/
+/registry-tags.json
+
+# Editor leftovers
+*.java.txt
+*.backup

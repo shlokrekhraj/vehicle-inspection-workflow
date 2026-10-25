@@ -1,0 +1,49 @@
+# Creates the infrastructure: network, database container and a target node
+# started from a clean ubuntu:22.04 image.
+- name: Create the Docker network for the environment
+  community.docker.docker_network:
+    name: "{{ docker_network }}"
+    state: present
+
+- name: Run the MySQL database container
+  community.docker.docker_container:
+    name: "{{ db_container }}"
+    image: "{{ db_image }}"
+    state: started
+    restart_policy: unless-stopped
+    network_mode: "{{ docker_network }}"
+    networks:
+      - name: "{{ docker_network }}"
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ db_password }}"
+    volumes:
+      - vi-node-db-data:/var/lib/mysql
+  no_log: true
+
+- name: Wait until MySQL accepts TCP connections
+  community.docker.docker_container_exec:
+    container: "{{ db_container }}"
+    argv: ["mysqladmin", "ping", "-h", "127.0.0.1", "-u{{ db_user }}", "-p{{ db_password }}"]
+  register: db_ping
+  until: db_ping.rc == 0
+  retries: 40
+  delay: 3
+  changed_when: false
+  no_log: true
+
+- name: Provision the target node from a clean image ({{ node_image }})
+  community.docker.docker_container:
+    name: "{{ item }}"
+    hostname: "{{ item }}"
+    image: "{{ node_image }}"
+    command: ["sleep", "infinity"]
+    init: true
+    state: started
+    recreate: "{{ fresh_node | bool }}"
+    restart_policy: unless-stopped
+    network_mode: "{{ docker_network }}"
+    networks:
+      - name: "{{ docker_network }}"
+    published_ports:
+      - "{{ hostvars[item].node_http_port }}:80"
+  loop: "{{ groups['app_nodes'] }}"

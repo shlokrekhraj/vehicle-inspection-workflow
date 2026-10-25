@@ -44,3 +44,19 @@ Reports: `target/surefire-reports/` (XML + TXT). `mvn test` without the profile 
 ## Environment
 
 Chrome (Selenium Manager downloads the matching ChromeDriver automatically), JDK 17, Maven, MySQL.
+
+## Local execution result
+
+Run on the author's PC on 25 Oct 2026 at 15:54 against the deployed app (`http://localhost:8088`):
+
+```
+mvn -B -Pselenium test -Dapp.baseUrl=http://localhost:8088
+Tests run: 2, Failures: 0 -- ReviewWorkflowSeleniumTest
+Tests run: 2, Failures: 0 -- SubmitRequestSeleniumTest
+Tests run: 2, Failures: 0 -- UserAccountSeleniumTest
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
+BUILD SUCCESS
+```
+
+Full log: `docs/evidence/step-09/local-selenium-run.log`. Per-class reports: `docs/evidence/step-09/*.txt`.
+The failure-screenshot mechanism was exercised in Jenkins build #18 (see `docs/evidence/step-10/`).

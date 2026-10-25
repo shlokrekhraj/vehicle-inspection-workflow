@@ -105,7 +105,7 @@ pipeline {
                             bat "%PS% deploy\\windows\\run-container.ps1 -Image ${IMAGE_NAME}:${APP_VERSION} -Name vi-app-test -Environment ci -DbName vehicle_inspection_ci -HostPort ${TEST_PORT}"
                             bat "mvn -B -Pselenium test -Dapp.baseUrl=http://localhost:${TEST_PORT}"
                         } finally {
-                            bat(returnStatus: true, script: 'if not exist test-run mkdir test-run & docker logs vi-app-test > test-run\\app-test-container.log 2>&1 & docker rm -f vi-app-test')
+                            bat(returnStatus: true, script: '(if not exist test-run mkdir test-run) & docker logs vi-app-test > test-run\\app-test-container.log 2>&1 & docker rm -f vi-app-test')
                         }
                     }
                 }

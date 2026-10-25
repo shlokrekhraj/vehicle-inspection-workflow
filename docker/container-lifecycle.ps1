@@ -57,7 +57,7 @@ for ($i = 0; $i -lt 40; $i++) {
 Step "9. Running containers"       "docker ps --filter name=vi-lifecycle"
 Step "10. Port mapping"            "docker port $name"
 Step "11. Health status"           "docker inspect -f '{{.State.Status}} / health={{.State.Health.Status}}' $name"
-Step "12. HTTP check via mapped port" "(Invoke-WebRequest -UseBasicParsing http://localhost:$Port/actuator/health).Content"
+Step "12. HTTP check via mapped port" "Invoke-RestMethod http://localhost:$Port/actuator/health | ConvertTo-Json -Depth 6"
 Step "13. Container logs (last 25 lines)" "docker logs --tail 25 $name"
 Step "14. Resource usage"          "docker stats --no-stream $name"
 Step "15. Stop container"          "docker stop $name"

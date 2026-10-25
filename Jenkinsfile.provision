@@ -83,7 +83,7 @@ pipeline {
                     bat "%PS% ansible\\run-ansible.ps1 -Playbook deploy.yml -AppVersion ${V2} -LogFile %EVIDENCE%\\04-deploy-v2.log"
                     bat "%PS% ansible\\run-ansible.ps1 -Playbook rollback.yml -LogFile %EVIDENCE%\\05-manual-rollback.log"
                     // b) deploy a broken release - the health check fails and Ansible rolls back automatically
-                    bat "%PS% ansible\\run-ansible.ps1 -Playbook deploy.yml -AppVersion 1.3.${BUILD_NUMBER}-broken -ExtraArgs \"-e simulate_bad_release=true -e health_retries=12\" -LogFile %EVIDENCE%\\06-auto-rollback.log"
+                    bat "%PS% ansible\\run-ansible.ps1 -Playbook deploy.yml -AppVersion 1.3.${BUILD_NUMBER}-broken -ExtraArgs \"-e simulate_bad_release=true\" -LogFile %EVIDENCE%\\06-auto-rollback.log"
                     bat "%PS% ansible\\run-ansible.ps1 -Playbook health.yml -LogFile %EVIDENCE%\\07-health-after-recovery.log"
                 }
                 bat "%PS% deploy\\windows\\wait-for-health.ps1 -Url http://localhost:8095/actuator/health -TimeoutSeconds 60"

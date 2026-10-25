@@ -1,5 +1,6 @@
-// Vehicle Inspection Workflow - Pipeline as Code (Step 8)
+// Vehicle Inspection Workflow - Pipeline as Code (Steps 8 and 10)
 // Checkout -> Build & Unit Test -> Package -> Selenium Test -> Deploy (jar behind Nginx)
+// Any failing API or Selenium test fails its stage, so Deploy never runs on a broken build.
 
 pipeline {
     agent any
@@ -86,13 +87,17 @@ pipeline {
             }
             post {
                 always {
-                    junit testResults: 'target/surefire-reports/TEST-*.xml', allowEmptyResults: true
-                    archiveArtifacts artifacts: 'test-run/*.log', allowEmptyArchive: true
+                    junit testResults: 'target/selenium-reports/TEST-*.xml', allowEmptyResults: true
+                    archiveArtifacts artifacts: 'test-run/*.log, target/selenium-screenshots/**', allowEmptyArchive: true
                 }
             }
         }
 
         stage('Deploy') {
+            // Quality gate: only deploy when every earlier stage and test passed
+            when {
+                expression { currentBuild.currentResult == 'SUCCESS' }
+            }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'vehicle-inspection-db',
                         usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {

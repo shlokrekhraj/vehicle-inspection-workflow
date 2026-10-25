@@ -1,99 +1,76 @@
 package com.vehicleinspection.controller;
 
 import com.vehicleinspection.model.InspectionRequest;
-import com.vehicleinspection.repository.InspectionRequestRepository;
-import com.vehicleinspection.service.InspectionValidationService;
-import com.vehicleinspection.service.ReviewerService;
+import com.vehicleinspection.service.InspectionRequestService;
 import com.vehicleinspection.service.ReviewDecisionService;
+import com.vehicleinspection.service.ReviewerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/inspection-requests")
 public class InspectionRequestController {
 
-    private final InspectionRequestRepository inspectionRequestRepository;
-    private final InspectionValidationService validationService;
+    private final InspectionRequestService inspectionRequestService;
     private final ReviewerService reviewerService;
     private final ReviewDecisionService reviewDecisionService;
 
     public InspectionRequestController(
-            InspectionRequestRepository inspectionRequestRepository,
-            InspectionValidationService validationService,
+            InspectionRequestService inspectionRequestService,
             ReviewerService reviewerService,
             ReviewDecisionService reviewDecisionService) {
 
-        this.inspectionRequestRepository = inspectionRequestRepository;
-        this.validationService = validationService;
+        this.inspectionRequestService = inspectionRequestService;
         this.reviewerService = reviewerService;
         this.reviewDecisionService = reviewDecisionService;
     }
 
+    /** Applicant submits a request (tasks 3-7). */
     @PostMapping
-    public ResponseEntity<?> submitRequest(
+    public ResponseEntity<InspectionRequest> submitRequest(
             @RequestBody InspectionRequest request) {
-
-        if (!validationService.validateRequest(request)) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Invalid inspection request data");
-        }
-
-        request.setStatus("SUBMITTED");
-
-        InspectionRequest savedRequest =
-                inspectionRequestRepository.save(request);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(savedRequest);
+                .body(inspectionRequestService.submit(request));
     }
 
+    /** Reviewer dashboard: all requests, optionally filtered by ?status= (task 8). */
+    @GetMapping
+    public List<InspectionRequest> listRequests(
+            @RequestParam(required = false) String status) {
+
+        return inspectionRequestService.list(status);
+    }
+
+    /** Request details view (task 9). */
+    @GetMapping("/{id}")
+    public InspectionRequest getRequest(@PathVariable Long id) {
+        return inspectionRequestService.get(id);
+    }
+
+    /** Reviewer picks up a request (task 10). */
     @PutMapping("/{id}/review")
-    public ResponseEntity<?> startReview(@PathVariable Long id) {
-
-        try {
-            InspectionRequest request = reviewerService.startReview(id);
-            return ResponseEntity.ok(request);
-
-        } catch (RuntimeException exception) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(exception.getMessage());
-        }
+    public InspectionRequest startReview(@PathVariable Long id) {
+        return reviewerService.startReview(id);
     }
 
+    /** Approve / reject with remarks (tasks 11, 12, 14). */
     @PutMapping("/{id}/decision")
-    public ResponseEntity<?> makeDecision(
+    public InspectionRequest makeDecision(
             @PathVariable Long id,
-            @RequestParam String decision) {
+            @RequestParam String decision,
+            @RequestParam(required = false) String remarks) {
 
-        try {
-            InspectionRequest request =
-                    reviewDecisionService.makeDecision(id, decision);
-
-            return ResponseEntity.ok(request);
-
-        } catch (RuntimeException exception) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(exception.getMessage());
-        }
+        return reviewDecisionService.makeDecision(id, decision, remarks);
     }
 
+    /** Status tracking for the applicant (task 13). */
     @GetMapping("/{id}/status")
-    public ResponseEntity<?> getStatus(@PathVariable Long id) {
-
-    InspectionRequest request =
-            inspectionRequestRepository.findById(id).orElse(null);
-
-    if (request == null) {
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body("Inspection request not found");
+    public InspectionRequest getStatus(@PathVariable Long id) {
+        return inspectionRequestService.get(id);
     }
-
-    return ResponseEntity.ok(request);
-}
 }

@@ -2,6 +2,8 @@ package com.vehicleinspection.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "inspection_requests")
 public class InspectionRequest {
@@ -25,6 +27,14 @@ public class InspectionRequest {
     @Column(nullable = false)
     private String status;
 
+    /** MVP task 14 - remarks written by the reviewer with the decision. */
+    @Column(length = 500)
+    private String remarks;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
     public InspectionRequest() {
     }
 
@@ -34,7 +44,18 @@ public class InspectionRequest {
         this.vehicleType = vehicleType;
         this.ownerName = ownerName;
         this.documentName = documentName;
-        this.status = "SUBMITTED";
+        this.status = InspectionStatus.SUBMITTED;
+    }
+
+    @PrePersist
+    void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = createdAt;
+    }
+
+    @PreUpdate
+    void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -83,5 +104,21 @@ public class InspectionRequest {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 }

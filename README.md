@@ -1,4 +1,4 @@
-﻿# Containerized Vehicle Inspection Workflow
+# Containerized Vehicle Inspection Workflow
 
 A web-based Vehicle Inspection Workflow developed as an academic Software Engineering and DevOps project.
 

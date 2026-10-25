@@ -1,9 +1,13 @@
 package com.vehicleinspection.service;
 
+import com.vehicleinspection.exception.InvalidStateException;
+import com.vehicleinspection.exception.ResourceNotFoundException;
 import com.vehicleinspection.model.InspectionRequest;
+import com.vehicleinspection.model.InspectionStatus;
 import com.vehicleinspection.repository.InspectionRequestRepository;
 import org.springframework.stereotype.Service;
 
+/** MVP task 10 - Review Action. */
 @Service
 public class ReviewerService {
 
@@ -18,14 +22,14 @@ public class ReviewerService {
         InspectionRequest request = inspectionRequestRepository
                 .findById(requestId)
                 .orElseThrow(() ->
-                        new RuntimeException("Inspection request not found"));
+                        new ResourceNotFoundException("Inspection request not found"));
 
-        if (!"SUBMITTED".equals(request.getStatus())) {
-            throw new RuntimeException(
+        if (!InspectionStatus.SUBMITTED.equals(request.getStatus())) {
+            throw new InvalidStateException(
                     "Only submitted requests can be sent for review");
         }
 
-        request.setStatus("UNDER_REVIEW");
+        request.setStatus(InspectionStatus.UNDER_REVIEW);
 
         return inspectionRequestRepository.save(request);
     }

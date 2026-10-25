@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vehicle Inspection - Account</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header><strong>Vehicle Inspection Workflow</strong><a href="index.html">Account</a><a href="apply.html">Submit Request</a><a href="reviewer.html">Reviewer Dashboard</a><a href="status.html">Track Status</a></header>
+<main>
+  <div class="grid">
+    <section class="card">
+      <h1>Register</h1>
+      <form id="registerForm">
+        <label for="regName">Full name</label><input id="regName" required>
+        <label for="regEmail">Email</label><input id="regEmail" type="email" required>
+        <label for="regPassword">Password</label><input id="regPassword" type="password" minlength="6" required>
+        <label for="regRole">Role</label>
+        <select id="regRole"><option value="APPLICANT">Applicant</option><option value="REVIEWER">Reviewer</option></select>
+        <button type="submit" id="registerButton">Create account</button>
+      </form>
+      <div id="registerMessage" class="msg"></div>
+    </section>
+    <section class="card">
+      <h1>Login</h1>
+      <form id="loginForm">
+        <label for="loginEmail">Email</label><input id="loginEmail" type="email" required>
+        <label for="loginPassword">Password</label><input id="loginPassword" type="password" required>
+        <button type="submit" id="loginButton">Login</button>
+      </form>
+      <div id="loginMessage" class="msg"></div>
+    </section>
+  </div>
+</main>
+<script src="app.js"></script>
+<script>
+document.getElementById("registerForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  try {
+    const user = await api("POST", "/api/users/register", {
+      name: regName.value, email: regEmail.value, password: regPassword.value, role: regRole.value });
+    showMessage("registerMessage", "Registered " + user.email + " as " + user.role, true);
+  } catch (err) { showMessage("registerMessage", err.message, false); }
+});
+document.getElementById("loginForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  try {
+    const user = await api("POST", "/api/users/login", { email: loginEmail.value, password: loginPassword.value });
+    try { sessionStorage.setItem("vi-user", JSON.stringify(user)); } catch (ignored) {}
+    showMessage("loginMessage", "Welcome, " + user.name + " (" + user.role + ")", true);
+  } catch (err) { showMessage("loginMessage", err.message, false); }
+});
+</script>
+</body>
+</html>

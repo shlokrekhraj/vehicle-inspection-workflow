@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vehicle Inspection - Reviewer Dashboard</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header><strong>Vehicle Inspection Workflow</strong><a href="index.html">Account</a><a href="apply.html">Submit Request</a><a href="reviewer.html">Reviewer Dashboard</a><a href="status.html">Track Status</a></header>
+<main>
+  <section class="card">
+    <h1>Reviewer dashboard</h1>
+    <label for="statusFilter">Show</label>
+    <select id="statusFilter">
+      <option value="">All requests</option><option value="SUBMITTED">Submitted</option>
+      <option value="UNDER_REVIEW">Under review</option><option value="APPROVED">Approved</option><option value="REJECTED">Rejected</option>
+    </select>
+    <label for="remarks">Remarks for the next decision</label>
+    <textarea id="remarks" rows="2" placeholder="Required when rejecting"></textarea>
+    <div id="dashboardMessage" class="msg"></div>
+  </section>
+  <section class="card">
+    <table id="requestsTable">
+      <thead><tr><th>ID</th><th>Vehicle</th><th>Owner</th><th>Document</th><th>Status</th><th>Remarks</th><th>Action</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <p id="emptyState" class="muted" style="display:none">No requests to show.</p>
+  </section>
+</main>
+<script src="app.js"></script>
+<script>
+async function load() {
+  const status = statusFilter.value;
+  const rows = await api("GET", "/api/inspection-requests" + (status ? "?status=" + status : ""));
+  const body = document.querySelector("#requestsTable tbody");
+  body.innerHTML = rows.map(r => {
+    let actions = "";
+    if (r.status === "SUBMITTED") actions = '<button class="small" id="review-' + r.id + '" data-action="review" data-id="' + r.id + '">Start review</button>';
+    if (r.status === "UNDER_REVIEW") actions =
+      '<button class="small ok" id="approve-' + r.id + '" data-action="APPROVE" data-id="' + r.id + '">Approve</button>' +
+      '<button class="small bad" id="reject-' + r.id + '" data-action="REJECT" data-id="' + r.id + '">Reject</button>';
+    return '<tr id="row-' + r.id + '"><td>' + r.id + '</td><td>' + escapeHtml(r.vehicleNumber) + '<br><span class="muted">' + escapeHtml(r.vehicleType) +
+      '</span></td><td>' + escapeHtml(r.ownerName) + '</td><td>' + escapeHtml(r.documentName) +
+      '</td><td><span class="badge ' + r.status + '" id="status-' + r.id + '">' + r.status + '</span></td><td>' + escapeHtml(r.remarks) +
+      '</td><td>' + actions + '</td></tr>';
+  }).join("");
+  emptyState.style.display = rows.length ? "none" : "block";
+}
+document.querySelector("#requestsTable").addEventListener("click", async e => {
+  const button = e.target.closest("button[data-action]");
+  if (!button) return;
+  const id = button.dataset.id, action = button.dataset.action;
+  try {
+    if (action === "review") {
+      await api("PUT", "/api/inspection-requests/" + id + "/review");
+      showMessage("dashboardMessage", "Request " + id + " is now UNDER_REVIEW", true);
+    } else {
+      const query = "decision=" + action + "&remarks=" + encodeURIComponent(remarks.value);
+      const r = await api("PUT", "/api/inspection-requests/" + id + "/decision?" + query);
+      showMessage("dashboardMessage", "Request " + id + " is now " + r.status, true);
+      remarks.value = "";
+    }
+    await load();
+  } catch (err) { showMessage("dashboardMessage", err.message, false); }
+});
+statusFilter.addEventListener("change", load);
+load().catch(err => showMessage("dashboardMessage", err.message, false));
+</script>
+</body>
+</html>

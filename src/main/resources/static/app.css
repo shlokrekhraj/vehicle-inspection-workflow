@@ -1,0 +1,21 @@
+:root { --bg:#f5f7fb; --card:#fff; --ink:#1d2433; --muted:#5b6475; --brand:#1f5eff; --ok:#11804a; --bad:#c62828; --line:#dfe3ec; }
+* { box-sizing: border-box; }
+body { margin:0; font-family: system-ui, "Segoe UI", Roboto, Arial, sans-serif; background:var(--bg); color:var(--ink); }
+header { background:#0f1b3d; color:#fff; padding:14px 24px; display:flex; gap:24px; align-items:center; flex-wrap:wrap; }
+header strong { font-size:18px; margin-right:auto; }
+header a { color:#cfd8ff; text-decoration:none; }
+header a.active, header a:hover { color:#fff; text-decoration:underline; }
+main { max-width:980px; margin:24px auto; padding:0 16px; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:20px; margin-bottom:20px; }
+h1 { font-size:22px; margin:0 0 14px; } h2 { font-size:18px; margin:0 0 12px; }
+label { display:block; font-weight:600; margin:10px 0 4px; }
+input, select, textarea { width:100%; padding:9px 10px; border:1px solid var(--line); border-radius:6px; font:inherit; }
+button { margin-top:14px; background:var(--brand); color:#fff; border:0; border-radius:6px; padding:9px 16px; font:inherit; cursor:pointer; }
+button.ok { background:var(--ok); } button.bad { background:var(--bad); } button.small { margin:0 4px 0 0; padding:5px 10px; font-size:13px; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; }
+.msg { margin-top:14px; padding:10px 12px; border-radius:6px; white-space:pre-wrap; display:none; }
+.msg.show { display:block; } .msg.success { background:#e6f6ee; color:var(--ok); } .msg.error { background:#fdecea; color:var(--bad); }
+table { width:100%; border-collapse:collapse; font-size:14px; } th, td { text-align:left; padding:8px; border-bottom:1px solid var(--line); vertical-align:top; }
+.badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:12px; font-weight:700; background:#e8ecf7; }
+.badge.APPROVED { background:#e6f6ee; color:var(--ok); } .badge.REJECTED { background:#fdecea; color:var(--bad); } .badge.UNDER_REVIEW { background:#fff4d6; color:#8a5a00; }
+.muted { color:var(--muted); font-size:14px; }

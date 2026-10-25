@@ -1,0 +1,10 @@
+# Full environment: provision -> configure -> deploy -> verify.
+# Run it twice to show idempotency (second run: changed=0).
+- name: Provision
+  ansible.builtin.import_playbook: provision.yml
+
+- name: Configure
+  ansible.builtin.import_playbook: configure.yml
+
+- name: Deploy
+  ansible.builtin.import_playbook: deploy.yml

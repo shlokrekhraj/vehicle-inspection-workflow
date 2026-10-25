@@ -1,0 +1,111 @@
+# Release layout:
+#   /opt/vehicle-inspection/releases/<version>/app.jar
+#   /opt/vehicle-inspection/current  -> releases/<version>   (symlink)
+#   /opt/vehicle-inspection/previous_release                  (last good release path)
+
+- name: Work out release paths
+  ansible.builtin.set_fact:
+    release_dir: "{{ app_home }}/releases/{{ app_version }}"
+
+- name: Read the currently deployed release
+  ansible.builtin.stat:
+    path: "{{ app_home }}/current"
+  register: current_link
+
+- name: Remember which release was live before this run
+  ansible.builtin.set_fact:
+    live_release: "{{ current_link.stat.lnk_source if (current_link.stat.exists and current_link.stat.islnk) else '' }}"
+
+- name: Create release folder {{ app_version }}
+  ansible.builtin.file:
+    path: "{{ release_dir }}"
+    state: directory
+    owner: root
+    group: "{{ app_group }}"
+    mode: "0755"
+
+- name: Copy application jar
+  ansible.builtin.copy:
+    src: "{{ app_jar_src }}"
+    dest: "{{ release_dir }}/app.jar"
+    owner: root
+    group: "{{ app_group }}"
+    mode: "0644"
+  register: jar_copy
+  when: not (simulate_bad_release | bool)
+
+- name: Copy a deliberately corrupt jar (rollback demonstration)
+  ansible.builtin.copy:
+    content: "this is not a valid jar - used to demonstrate automatic rollback\n"
+    dest: "{{ release_dir }}/app.jar"
+    mode: "0644"
+  register: bad_jar_copy
+  when: simulate_bad_release | bool
+
+- name: Activate release {{ app_version }} and verify it
+  block:
+    - name: Record the previous release for rollback
+      ansible.builtin.copy:
+        content: "{{ live_release }}"
+        dest: "{{ app_home }}/previous_release"
+        mode: "0644"
+      when: live_release | length > 0 and live_release != release_dir
+
+    - name: Point 'current' at the new release
+      ansible.builtin.file:
+        src: "{{ release_dir }}"
+        dest: "{{ app_home }}/current"
+        state: link
+        force: true
+      register: switch_release
+
+    - name: Restart the application for the new release
+      ansible.builtin.sysvinit:
+        name: "{{ app_name }}"
+        state: restarted
+      when: switch_release.changed or (jar_copy is changed) or (bad_jar_copy is changed)
+
+    - name: Ensure the application is running
+      ansible.builtin.sysvinit:
+        name: "{{ app_name }}"
+        state: started
+        enabled: true
+
+    - name: Health check new release
+      ansible.builtin.include_role:
+        name: verify
+
+  rescue:
+    - name: Report failed release
+      ansible.builtin.debug:
+        msg: "Release {{ app_version }} FAILED its health check - rolling back to {{ live_release | default('nothing', true) }}"
+
+    - name: Stop if there is nothing to roll back to
+      ansible.builtin.fail:
+        msg: "No previous release exists, cannot roll back."
+      when: live_release | length == 0 or live_release == release_dir
+
+    - name: Point 'current' back at the last good release
+      ansible.builtin.file:
+        src: "{{ live_release }}"
+        dest: "{{ app_home }}/current"
+        state: link
+        force: true
+
+    - name: Restart the application on the last good release
+      ansible.builtin.sysvinit:
+        name: "{{ app_name }}"
+        state: restarted
+
+    - name: Health check after rollback
+      ansible.builtin.include_role:
+        name: verify
+
+    - name: Remove the failed release
+      ansible.builtin.file:
+        path: "{{ release_dir }}"
+        state: absent
+
+    - name: Rollback summary
+      ansible.builtin.debug:
+        msg: "ROLLBACK COMPLETE - {{ live_release | basename }} is serving traffic again; {{ app_version }} was removed."

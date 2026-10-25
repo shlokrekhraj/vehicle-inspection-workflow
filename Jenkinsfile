@@ -30,8 +30,10 @@ pipeline {
     }
 
     environment {
-        // The Jenkins service runs as SYSTEM, which does not get Docker Desktop on its PATH
-        PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
+        // The Jenkins service runs as SYSTEM: point it at Docker Desktop (installed per-user)
+        // and at the user's Docker config so it uses the same engine and CLI plugins (compose).
+        PATH = "C:\\Users\\ASUS\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin;C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
+        DOCKER_CONFIG = 'C:\\Users\\ASUS\\.docker'
         JAR_NAME    = 'vehicle-inspection-workflow-0.0.1-SNAPSHOT.jar'
         APP_VERSION = "1.1.${BUILD_NUMBER}"
         TEST_PORT   = '8080'

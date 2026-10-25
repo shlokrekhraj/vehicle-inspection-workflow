@@ -55,7 +55,7 @@ document.querySelector("#requestsTable").addEventListener("click", async e => {
       await api("PUT", "/api/inspection-requests/" + id + "/review");
       showMessage("dashboardMessage", "Request " + id + " is now UNDER_REVIEW", true);
     } else {
-      const query = "decision=" + action + "&remarks=" + encodeURIComponent(remarks.value);
+      const query = "decision=" + action + "D&remarks=" + encodeURIComponent(remarks.value);
       const r = await api("PUT", "/api/inspection-requests/" + id + "/decision?" + query);
       showMessage("dashboardMessage", "Request " + id + " is now " + r.status, true);
       remarks.value = "";

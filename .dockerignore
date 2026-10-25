@@ -1,0 +1,4 @@
+# Only target/*.jar is needed in the build context
+*
+!target/vehicle-inspection-workflow-*.jar
+target/*.jar.original

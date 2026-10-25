@@ -1,0 +1,1 @@
+simulate_bad_release: false   # true = ship a corrupt jar to prove automatic rollback

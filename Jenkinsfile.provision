@@ -1,0 +1,102 @@
+// Vehicle Inspection Workflow - Automated Provisioning & Reliability Validation (Steps 13 and 14)
+// Job: Vehicle-Inspection-Provisioning (Pipeline script from SCM, script path: Jenkinsfile.provision)
+
+pipeline {
+    agent any
+
+    tools {
+        jdk 'JDK-17'
+        maven 'Maven-3.10.0'
+    }
+
+    options {
+        timestamps()
+        disableConcurrentBuilds()
+    }
+
+    environment {
+        V1 = "1.3.${BUILD_NUMBER}"
+        V2 = "1.3.${BUILD_NUMBER}-hotfix"
+        PS = 'powershell -NoProfile -ExecutionPolicy Bypass -File'
+        EVIDENCE = 'ansible-logs'
+    }
+
+    stages {
+        stage('Package') {
+            steps {
+                checkout scm
+                bat 'mvn -B clean package -DskipTests'
+            }
+        }
+
+        stage('Build Ansible Control Node') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'vehicle-inspection-db',
+                        usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
+                    bat 'docker compose -f ansible/docker-compose.yml build'
+                    bat 'docker compose -f ansible/docker-compose.yml run --rm -T ansible ansible --version'
+                }
+            }
+        }
+
+        stage('Provision Clean Node + Configure + Deploy') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'vehicle-inspection-db',
+                        usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
+                    bat "%PS% ansible\\run-ansible.ps1 -Playbook site.yml -AppVersion ${V1} -ExtraArgs \"-e fresh_node=true\" -LogFile %EVIDENCE%\\01-first-run.log"
+                }
+            }
+        }
+
+        stage('Idempotency Check') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'vehicle-inspection-db',
+                        usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
+                    bat "%PS% ansible\\run-ansible.ps1 -Playbook site.yml -AppVersion ${V1} -LogFile %EVIDENCE%\\02-idempotency-rerun.log"
+                }
+                // Every host in the PLAY RECAP must report changed=0 on the second run
+                powershell '''
+                    $recap = Get-Content "$env:EVIDENCE\\02-idempotency-rerun.log" | Select-String -Pattern "^\\S+\\s+:\\s+ok="
+                    $recap | ForEach-Object { Write-Host $_.Line }
+                    $changed = $recap | Where-Object { $_.Line -notmatch "changed=0" }
+                    if ($changed) { throw "Not idempotent - second run changed something." }
+                    Write-Host "IDEMPOTENT: second run reported changed=0 on every host."
+                '''
+            }
+        }
+
+        stage('Health Check') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'vehicle-inspection-db',
+                        usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
+                    bat "%PS% ansible\\run-ansible.ps1 -Playbook health.yml -LogFile %EVIDENCE%\\03-health.log"
+                }
+                bat "%PS% deploy\\windows\\wait-for-health.ps1 -Url http://localhost:8095/actuator/health -TimeoutSeconds 60"
+            }
+        }
+
+        stage('Rollback & Recovery') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'vehicle-inspection-db',
+                        usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
+                    // a) deploy a second good release, then roll back to the previous stable one
+                    bat "%PS% ansible\\run-ansible.ps1 -Playbook deploy.yml -AppVersion ${V2} -LogFile %EVIDENCE%\\04-deploy-v2.log"
+                    bat "%PS% ansible\\run-ansible.ps1 -Playbook rollback.yml -LogFile %EVIDENCE%\\05-manual-rollback.log"
+                    // b) deploy a broken release - the health check fails and Ansible rolls back automatically
+                    bat "%PS% ansible\\run-ansible.ps1 -Playbook deploy.yml -AppVersion 1.3.${BUILD_NUMBER}-broken -ExtraArgs \"-e simulate_bad_release=true\" -LogFile %EVIDENCE%\\06-auto-rollback.log"
+                    bat "%PS% ansible\\run-ansible.ps1 -Playbook health.yml -LogFile %EVIDENCE%\\07-health-after-recovery.log"
+                }
+                bat "%PS% deploy\\windows\\wait-for-health.ps1 -Url http://localhost:8095/actuator/health -TimeoutSeconds 60"
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'ansible-logs/*.log', allowEmptyArchive: true
+        }
+        success {
+            echo 'Provisioned, idempotent, healthy and recoverable - http://localhost:8095/'
+        }
+    }
+}

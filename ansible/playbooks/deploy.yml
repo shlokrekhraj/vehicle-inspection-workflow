@@ -1,0 +1,5 @@
+- name: Deploy the application (automatic rollback on failed health check)
+  hosts: app_nodes
+  gather_facts: false
+  roles:
+    - app

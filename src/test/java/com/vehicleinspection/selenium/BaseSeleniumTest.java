@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -35,7 +36,10 @@ public abstract class BaseSeleniumTest {
         }
         options.addArguments("--disable-gpu", "--no-sandbox", "--window-size=1280,900");
         driver = new ChromeDriver(options);
+        // The dashboard re-renders its table after every action, so an element found
+        // a moment ago can go stale - keep polling instead of failing.
         wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        wait.ignoring(StaleElementReferenceException.class);
     }
 
     @AfterEach

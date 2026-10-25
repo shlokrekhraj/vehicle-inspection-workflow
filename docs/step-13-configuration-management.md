@@ -2,9 +2,9 @@
 
 ## Why Ansible in a container
 
-Ansible does not run natively on Windows. The control node is a small image (`ansible/Dockerfile`: Python 3.12 + Ansible 10 / ansible-core 2.17 + Docker SDK). It mounts the repository and the Docker socket, so the same playbooks run from PowerShell or Jenkins with nothing else installed.
+Ansible does not run natively on Windows. The control node is a small image (`ansible/Dockerfile`: Python 3.12 + Ansible 10 / ansible-core 2.17 + Docker SDK + Docker CLI). It mounts the repository and the Docker socket, so the same playbooks run from PowerShell or Jenkins with nothing else installed.
 
-The target node is `vi-node1`, a container started from a **clean `ubuntu:22.04` image**. Ansible reaches it through the `community.docker.docker_api` connection, so there are no SSH keys to manage.
+The target node is `vi-node1`, a container started from a **clean `ubuntu:22.04` image**. Ansible reaches it through the `community.docker.docker` connection (`docker exec` / `docker cp`), so there are no SSH keys to manage.
 
 ## Configuration specification (server prerequisites)
 

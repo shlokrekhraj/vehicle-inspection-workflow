@@ -1,13 +1,14 @@
 # Makes sure the shared Docker infrastructure exists (idempotent):
 #   network vi-net, local registry vi-registry (localhost:5000), MySQL vi-mysql.
 param([string] $Network = "vi-net")
-$ErrorActionPreference = "Stop"
+# Note: no "Stop" error preference - in Windows PowerShell that turns harmless
+# docker stderr output (e.g. "not found") into terminating errors.
 if (-not $env:DB_PASSWORD) { throw "DB_PASSWORD is not set" }
 
 function Exists([string] $kind, [string] $name) {
-    if ($kind -eq "network") { docker network inspect $name 2>$null | Out-Null }
-    else { docker container inspect $name 2>$null | Out-Null }
-    return ($LASTEXITCODE -eq 0)
+    if ($kind -eq "network") { $found = docker network ls --filter "name=^${name}$" --format "{{.Name}}" }
+    else { $found = docker ps -a --filter "name=^${name}$" --format "{{.Names}}" }
+    return [bool]$found
 }
 function Ensure-Running([string] $name) {
     $state = docker inspect -f '{{.State.Running}}' $name
@@ -30,7 +31,8 @@ if (-not (Exists "container" "vi-mysql")) {
 
 Write-Host "Waiting for MySQL to accept connections..."
 for ($i = 0; $i -lt 60; $i++) {
-    docker exec vi-mysql mysqladmin ping -h 127.0.0.1 -uroot "-p$env:DB_PASSWORD" 2>$null | Out-Null
+    # the container knows its own root password, so nothing secret goes on the command line
+    docker exec vi-mysql sh -c 'MYSQL_PWD=$MYSQL_ROOT_PASSWORD mysqladmin ping -h 127.0.0.1 -uroot --silent' 2>$null | Out-Null
     if ($LASTEXITCODE -eq 0) { Write-Host "MySQL is ready"; exit 0 }
     Start-Sleep -Seconds 3
 }

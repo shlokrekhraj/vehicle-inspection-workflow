@@ -6,7 +6,6 @@ param(
     [string] $Name = "vi-nginx",
     [string] $Network = ""
 )
-$ErrorActionPreference = "Stop"
 
 New-Item -ItemType Directory -Force -Path $ConfigDir | Out-Null
 Copy-Item (Join-Path $PSScriptRoot "..\nginx\default.conf.template") $ConfigDir -Force

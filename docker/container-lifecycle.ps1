@@ -42,7 +42,8 @@ Step "6. Create network"           "docker network create $net"
 Step "7. Start MySQL container"    "docker run -d --name $db --network $net -e MYSQL_ROOT_PASSWORD=$env:DB_PASSWORD -e MYSQL_DATABASE=vehicle_inspection_db mysql:8.4"
 Write-Host "Waiting for MySQL..." ; $ok = $false
 for ($i = 0; $i -lt 40 -and -not $ok; $i++) {
-    docker exec $db mysqladmin ping -h 127.0.0.1 -uroot "-p$env:DB_PASSWORD" 2>$null | Out-Null
+    # the container knows its own root password, so nothing secret goes on the command line
+    docker exec $db sh -c 'MYSQL_PWD=$MYSQL_ROOT_PASSWORD mysqladmin ping -h 127.0.0.1 -uroot --silent' 2>$null | Out-Null
     if ($LASTEXITCODE -eq 0) { $ok = $true } else { Start-Sleep 3 }
 }
 

@@ -1,8 +1,9 @@
-# A clean Ubuntu image has no Python, which Ansible modules need.
+# A clean Ubuntu image has no Python, which Ansible modules need
+# (python3-apt is needed by the apt module).
 - name: Install Python on the node if it is missing
   ansible.builtin.raw: >
-    test -x /usr/bin/python3 && echo PRESENT ||
-    (apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq python3 >/dev/null && echo INSTALLED)
+    if /usr/bin/python3 -c 'import apt' 2>/dev/null; then echo PRESENT; else
+    apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq python3 python3-apt >/dev/null && echo INSTALLED; fi
   register: python_bootstrap
   changed_when: "'INSTALLED' in python_bootstrap.stdout"
 

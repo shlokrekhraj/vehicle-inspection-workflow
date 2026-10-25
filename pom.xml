@@ -114,6 +114,7 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <excludes combine.self="override"/>
+                            <reportsDirectory>${project.build.directory}/selenium-reports</reportsDirectory>
                             <includes>
                                 <include>**/selenium/**/*Test.java</include>
                             </includes>

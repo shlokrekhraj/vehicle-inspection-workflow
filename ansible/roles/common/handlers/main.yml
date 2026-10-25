@@ -1,0 +1,12 @@
+- name: Check whether a release is deployed
+  ansible.builtin.stat:
+    path: "{{ app_home }}/current/app.jar"
+  register: deployed_jar
+  listen: restart vehicle-inspection
+
+- name: Restart the application
+  ansible.builtin.sysvinit:
+    name: "{{ app_name }}"
+    state: restarted
+  when: deployed_jar.stat.exists
+  listen: restart vehicle-inspection

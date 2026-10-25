@@ -1,0 +1,5 @@
+- name: Provision infrastructure (network, database, clean target node)
+  hosts: control
+  gather_facts: false
+  roles:
+    - provision

@@ -1,0 +1,7 @@
+- name: Configure target node prerequisites
+  hosts: app_nodes
+  gather_facts: false
+  roles:
+    - bootstrap
+    - common
+    - nginx

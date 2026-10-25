@@ -24,7 +24,7 @@ The target node is `vi-node1`, a container started from a **clean `ubuntu:22.04`
 ansible/
   Dockerfile, docker-compose.yml, ansible.cfg, run-ansible.ps1
   inventory/hosts.yml          control (localhost) + app_nodes (vi-node1)
-  group_vars/all.yml           all variables in one place
+  inventory/group_vars/all.yml all variables in one place
   playbooks/provision.yml      network, database, clean node
   playbooks/configure.yml      bootstrap + common + nginx roles
   roles/{provision,bootstrap,common,nginx}

@@ -94,6 +94,47 @@ Institute: Vidyalankar Institute of Technology
 
 Department: Computer Engineering
 
+## Running the Application
 
-Feature branch: Inspection workflow MVP implemented.
-Development branch: MVP integration update.
+```powershell
+# Requires JDK 17, Maven and MySQL (the database is created automatically)
+$env:DB_PASSWORD = "<mysql root password>"
+mvn spring-boot:run
+# http://localhost:8080  - account, submit request, reviewer dashboard, status tracking
+```
+
+| Command | What it does |
+|---------|--------------|
+| `mvn test` | Fast API tests on an in-memory H2 database |
+| `mvn -Pselenium test -Dapp.baseUrl=http://localhost:8080` | Selenium browser suite against a running app |
+| `docker compose up -d --build` | MySQL + app + Nginx on http://localhost:8088 |
+| `ansible\run-ansible.ps1 -Playbook site.yml` | Provision, configure and deploy with Ansible |
+
+## API
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| POST | `/api/users/register` | Register applicant or reviewer |
+| POST | `/api/users/login` | Login |
+| POST | `/api/inspection-requests` | Submit request (validated) |
+| GET | `/api/inspection-requests?status=` | Reviewer dashboard |
+| GET | `/api/inspection-requests/{id}` | Request details |
+| PUT | `/api/inspection-requests/{id}/review` | Start review |
+| PUT | `/api/inspection-requests/{id}/decision?decision=APPROVE\|REJECT&remarks=` | Approve / reject |
+| GET | `/api/inspection-requests/{id}/status` | Status tracking |
+| GET | `/actuator/health` | Health check |
+
+## DevOps Implementation
+
+| Step | Deliverable | Location |
+|------|-------------|----------|
+| 6 | MVP completion and updated backlog | `docs/step-06-mvp-backlog.md` |
+| 7 | Jenkins CI job (`Vehicle-Inspection-CI`, SCM polling, archived jar) | Jenkins |
+| 8 | Pipeline as code with Nginx deploy | `Jenkinsfile`, `deploy/` |
+| 9 | Selenium test plan and suite | `docs/step-09-test-plan.md`, `src/test/java/.../selenium` |
+| 10 | Continuous testing and deploy gate | `docs/step-10-continuous-testing.md` |
+| 11 | Docker image and lifecycle | `Dockerfile`, `docker/`, `docs/step-11-docker.md` |
+| 12 | Jenkins-Docker continuous deployment | `Jenkinsfile`, `docs/step-12-continuous-deployment.md` |
+| 13 | Ansible configuration management | `ansible/`, `docs/step-13-configuration-management.md` |
+| 14 | Provisioning, idempotency, health, rollback | `Jenkinsfile.provision`, `docs/step-14-provisioning-reliability.md` |
+

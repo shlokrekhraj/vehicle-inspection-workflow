@@ -30,6 +30,8 @@ pipeline {
     }
 
     environment {
+        // The Jenkins service runs as SYSTEM, which does not get Docker Desktop on its PATH
+        PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
         JAR_NAME    = 'vehicle-inspection-workflow-0.0.1-SNAPSHOT.jar'
         APP_VERSION = "1.1.${BUILD_NUMBER}"
         TEST_PORT   = '8080'
@@ -40,6 +42,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+                bat 'java -version && mvn -v && docker version'
                 bat 'git log -1 --pretty="Building commit %%h - %%s (%%an)"'
             }
         }

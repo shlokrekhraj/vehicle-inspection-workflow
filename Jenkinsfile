@@ -100,20 +100,20 @@ pipeline {
                     withEnv(['JENKINS_NODE_COOKIE=dontKillMe', 'BUILD_ID=dontKillMe']) {
                         bat """
                             if not exist "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\releases" mkdir "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\releases"
-                            copy /Y "target\\${JAR_NAME}" "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\releases\\vehicle-inspection-${APP_VERSION}.jar"
+                            copy /Y "target\\${JAR_NAME}" "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\releases\\vehicle-inspection-${APP_VERSION}.jar" || exit /b 1
                             powershell -NoProfile -ExecutionPolicy Bypass -File deploy\\windows\\start-app.ps1 ^
                                 -Jar "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\releases\\vehicle-inspection-${APP_VERSION}.jar" ^
                                 -WorkDir "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}" -Port ${params.APP_PORT} ^
-                                -Environment ${params.DEPLOY_ENV} -Version ${APP_VERSION} -DbName vehicle_inspection_${params.DEPLOY_ENV}
+                                -Environment ${params.DEPLOY_ENV} -Version ${APP_VERSION} -DbName vehicle_inspection_${params.DEPLOY_ENV} || exit /b 1
                         """
                     }
                 }
                 bat """
                     powershell -NoProfile -ExecutionPolicy Bypass -File deploy\\windows\\wait-for-health.ps1 ^
-                        -Url http://localhost:${params.APP_PORT}/actuator/health -ErrorLog "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\app-error.log"
+                        -Url http://localhost:${params.APP_PORT}/actuator/health -ErrorLog "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\app-error.log" || exit /b 1
                     powershell -NoProfile -ExecutionPolicy Bypass -File deploy\\windows\\deploy-nginx.ps1 ^
                         -Upstream host.docker.internal:${params.APP_PORT} -ConfigDir "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\nginx" ^
-                        -Port ${params.NGINX_PORT} -Name vi-nginx-${params.DEPLOY_ENV}
+                        -Port ${params.NGINX_PORT} -Name vi-nginx-${params.DEPLOY_ENV} || exit /b 1
                     powershell -NoProfile -ExecutionPolicy Bypass -File deploy\\windows\\wait-for-health.ps1 ^
                         -Url http://localhost:${params.NGINX_PORT}/actuator/health -TimeoutSeconds 60
                 """

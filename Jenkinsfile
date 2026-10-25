@@ -1,3 +1,6 @@
+// Vehicle Inspection Workflow - Pipeline as Code (Step 8)
+// Checkout -> Build & Unit Test -> Package -> Selenium Test -> Deploy (jar behind Nginx)
+
 pipeline {
     agent any
 
@@ -6,45 +9,44 @@ pipeline {
         maven 'Maven-3.10.0'
     }
 
+    parameters {
+        choice(name: 'DEPLOY_ENV', choices: ['dev', 'staging'],
+               description: 'Target environment - selects the database and the deploy folder')
+        string(name: 'APP_PORT', defaultValue: '9090',
+               description: 'Port the deployed application listens on (behind Nginx)')
+        string(name: 'NGINX_PORT', defaultValue: '8088',
+               description: 'Public port of the Nginx reverse proxy')
+    }
+
     options {
         timestamps()
         disableConcurrentBuilds()
+        buildDiscarder(logRotator(numToKeepStr: '30'))
+    }
+
+    triggers {
+        // Poll GitHub every 5 minutes; a webhook can replace this later.
+        pollSCM('H/5 * * * *')
+    }
+
+    environment {
+        JAR_NAME    = 'vehicle-inspection-workflow-0.0.1-SNAPSHOT.jar'
+        APP_VERSION = "1.1.${BUILD_NUMBER}"
+        TEST_PORT   = '8080'
+        DEPLOY_ROOT = 'C:\\vehicle-inspection-deploy'
     }
 
     stages {
-        stage('Build Application') {
+        stage('Checkout') {
             steps {
-                bat 'mvn -B clean package -DskipTests'
+                checkout scm
+                bat 'git log -1 --pretty="Building commit %%h - %%s (%%an)"'
             }
         }
 
-        stage('Selenium Integration Test') {
+        stage('Build & Unit Test') {
             steps {
-                withCredentials([
-                    usernamePassword(
-                        credentialsId: 'vehicle-inspection-db',
-                        usernameVariable: 'DB_USERNAME',
-                        passwordVariable: 'DB_PASSWORD'
-                    )
-                ]) {
-                    script {
-                        try {
-                            bat '''
-                                powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference = 'Stop'; $app = Start-Process -FilePath 'java' -ArgumentList '-jar','target/vehicle-inspection-workflow-0.0.1-SNAPSHOT.jar' -WorkingDirectory (Get-Location).Path -RedirectStandardOutput 'app.log' -RedirectStandardError 'app-error.log' -PassThru; Set-Content -Path 'app.pid' -Value $app.Id; Write-Host ('Started application with PID ' + $app.Id)"
-                            '''
-
-                            bat '''
-                                powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference = 'Stop'; $ready = $false; for ($i = 0; $i -lt 60; $i++) { try { $r = Invoke-WebRequest -UseBasicParsing 'http://localhost:8080/inspection-test.html' -TimeoutSec 3; if ($r.StatusCode -eq 200) { $ready = $true; break } } catch { Start-Sleep -Seconds 2 }; if (-not $ready) { Start-Sleep -Seconds 2 } }; if (-not $ready) { if (Test-Path 'app-error.log') { Get-Content 'app-error.log' }; throw 'Application did not become ready on port 8080 within the timeout.' }; Write-Host 'Application is ready.'"
-                            '''
-
-                            bat 'mvn -B -Dtest=InspectionSeleniumTest test'
-                        } finally {
-                            bat(returnStatus: true, script: '''
-                                powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "if (Test-Path 'app.pid') { $appId = [int](Get-Content 'app.pid'); $p = Get-Process -Id $appId -ErrorAction SilentlyContinue; if ($p) { Stop-Process -Id $appId -Force; Write-Host 'Stopped application process.' } else { Write-Host 'Application process has already stopped.' } }"
-                            ''')
-                        }
-                    }
-                }
+                bat 'mvn -B clean test'
             }
             post {
                 always {
@@ -53,25 +55,79 @@ pipeline {
             }
         }
 
-        stage('Archive Artifact') {
+        stage('Package') {
             steps {
-                archiveArtifacts(
-                    artifacts: 'target/vehicle-inspection-workflow-0.0.1-SNAPSHOT.jar',
-                    fingerprint: true
-                )
+                bat 'mvn -B package -DskipTests'
+                archiveArtifacts artifacts: "target/${JAR_NAME}", fingerprint: true
+            }
+        }
+
+        stage('Selenium Test') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'vehicle-inspection-db',
+                        usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
+                    script {
+                        try {
+                            bat """
+                                powershell -NoProfile -ExecutionPolicy Bypass -File deploy\\windows\\start-app.ps1 ^
+                                    -Jar "%WORKSPACE%\\target\\${JAR_NAME}" -WorkDir "%WORKSPACE%\\test-run" ^
+                                    -Port ${TEST_PORT} -Environment ci -Version ${APP_VERSION} -DbName vehicle_inspection_ci
+                            """
+                            bat """
+                                powershell -NoProfile -ExecutionPolicy Bypass -File deploy\\windows\\wait-for-health.ps1 ^
+                                    -Url http://localhost:${TEST_PORT}/actuator/health -ErrorLog "%WORKSPACE%\\test-run\\app-error.log"
+                            """
+                            bat "mvn -B -Pselenium test -Dapp.baseUrl=http://localhost:${TEST_PORT}"
+                        } finally {
+                            bat 'powershell -NoProfile -ExecutionPolicy Bypass -File deploy\\windows\\stop-app.ps1 -WorkDir "%WORKSPACE%\\test-run"'
+                        }
+                    }
+                }
+            }
+            post {
+                always {
+                    junit testResults: 'target/surefire-reports/TEST-*.xml', allowEmptyResults: true
+                    archiveArtifacts artifacts: 'test-run/*.log', allowEmptyArchive: true
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'vehicle-inspection-db',
+                        usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
+                    // dontKillMe: keep the deployed app alive after the build finishes
+                    withEnv(['JENKINS_NODE_COOKIE=dontKillMe', 'BUILD_ID=dontKillMe']) {
+                        bat """
+                            if not exist "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\releases" mkdir "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\releases"
+                            copy /Y "target\\${JAR_NAME}" "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\releases\\vehicle-inspection-${APP_VERSION}.jar"
+                            powershell -NoProfile -ExecutionPolicy Bypass -File deploy\\windows\\start-app.ps1 ^
+                                -Jar "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\releases\\vehicle-inspection-${APP_VERSION}.jar" ^
+                                -WorkDir "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}" -Port ${params.APP_PORT} ^
+                                -Environment ${params.DEPLOY_ENV} -Version ${APP_VERSION} -DbName vehicle_inspection_${params.DEPLOY_ENV}
+                        """
+                    }
+                }
+                bat """
+                    powershell -NoProfile -ExecutionPolicy Bypass -File deploy\\windows\\wait-for-health.ps1 ^
+                        -Url http://localhost:${params.APP_PORT}/actuator/health -ErrorLog "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\app-error.log"
+                    powershell -NoProfile -ExecutionPolicy Bypass -File deploy\\windows\\deploy-nginx.ps1 ^
+                        -Upstream host.docker.internal:${params.APP_PORT} -ConfigDir "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\nginx" ^
+                        -Port ${params.NGINX_PORT} -Name vi-nginx-${params.DEPLOY_ENV}
+                    powershell -NoProfile -ExecutionPolicy Bypass -File deploy\\windows\\wait-for-health.ps1 ^
+                        -Url http://localhost:${params.NGINX_PORT}/actuator/health -TimeoutSeconds 60
+                """
+                echo "Deployed ${APP_VERSION} to ${params.DEPLOY_ENV}: http://localhost:${params.NGINX_PORT}/"
             }
         }
     }
 
     post {
         success {
-            echo 'CI pipeline and Selenium integration test completed successfully.'
+            echo "Pipeline succeeded - application available at http://localhost:${params.NGINX_PORT}/"
         }
         failure {
-            echo 'CI pipeline failed. Check the console output and test reports.'
-        }
-        always {
-            archiveArtifacts artifacts: 'app.log,app-error.log', allowEmptyArchive: true
+            echo 'Pipeline failed - deployment was skipped. Check the stage logs and test reports.'
         }
     }
 }

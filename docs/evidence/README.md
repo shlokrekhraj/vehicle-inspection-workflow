@@ -5,8 +5,8 @@ All runs on 25 Oct 2026 on the author's Windows 11 PC: Jenkins 2.x at `http://lo
 | Step | Deliverable | Evidence | Result |
 |------|-------------|----------|--------|
 | 1-3 | Problem definition, Agile plan, requirements & architecture | `docs/step-01-03/*.docx` | Done |
-| 4 | Repository, README, issue templates, branch policy | GitHub repo, `.github/ISSUE_TEMPLATE/`, README "Branch Strategy" | Done |
-| 5 | Feature branch + PR | PR #1 `feature/user-registration` | Done |
+| 4 | Repository, README, initial commits, issues, branch policy | GitHub repo, initial commit `b6b0b6f`, `.github/ISSUE_TEMPLATE/`, README "Branch Strategy"; **GitHub Issues #5-#19** (one per MVP user story, label `enhancement`) and **#20** (Step 10 defect, label `bug`), each closed with a link to its delivery | Done |
+| 5 | Feature branch, PR, review comments, merge | PR #1 `feature/user-registration` (review comment, merged); PR #2 `feature/inspection-workflow` -> `develop` (approved review, merged) | Done |
 | 6 | Functional MVP, merge conflict, tag, backlog | PR #2, conflict fix `9e1822d`, tags `v1.0.0` `v1.1.0`, `docs/step-06-mvp-backlog.md` | Done |
 | 7 | Jenkins CI job, trigger, archived artefact | `step-07/` - `Vehicle-Inspection-CI` build #10 "Started by an SCM change" (8 polling-triggered builds #3-#10), polling log, archived jar | SUCCESS |
 | 8 | Jenkinsfile, pipeline run, deployed app, parameters | `step-08/jenkins-pipeline-build-13-console.log` - commit `c1e35d7` (tag `step-08-jar-pipeline`), params `DEPLOY_ENV=dev APP_PORT=9090 NGINX_PORT=8088`; app healthy on 9090, Nginx on 8088 | SUCCESS |

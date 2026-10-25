@@ -71,7 +71,7 @@ pipeline {
                             bat """
                                 powershell -NoProfile -ExecutionPolicy Bypass -File deploy\\windows\\start-app.ps1 ^
                                     -Jar "%WORKSPACE%\\target\\${JAR_NAME}" -WorkDir "%WORKSPACE%\\test-run" ^
-                                    -Port ${TEST_PORT} -Environment ci -Version ${APP_VERSION} -DbName vehicle_inspection_ci
+                                    -Port ${TEST_PORT} -Environment ci -Version ${APP_VERSION} -DbName vehicle_inspection_db
                             """
                             bat """
                                 powershell -NoProfile -ExecutionPolicy Bypass -File deploy\\windows\\wait-for-health.ps1 ^
@@ -104,7 +104,7 @@ pipeline {
                             powershell -NoProfile -ExecutionPolicy Bypass -File deploy\\windows\\start-app.ps1 ^
                                 -Jar "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\releases\\vehicle-inspection-${APP_VERSION}.jar" ^
                                 -WorkDir "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}" -Port ${params.APP_PORT} ^
-                                -Environment ${params.DEPLOY_ENV} -Version ${APP_VERSION} -DbName vehicle_inspection_${params.DEPLOY_ENV} || exit /b 1
+                                -Environment ${params.DEPLOY_ENV} -Version ${APP_VERSION} -DbName vehicle_inspection_db || exit /b 1
                         """
                     }
                 }

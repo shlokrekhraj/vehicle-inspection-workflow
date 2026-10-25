@@ -1,0 +1,29 @@
+- name: Configure Nginx as reverse proxy for the app (port 80 -> {{ app_port }})
+  ansible.builtin.template:
+    src: vehicle-inspection.conf.j2
+    dest: /etc/nginx/sites-available/{{ app_name }}.conf
+    mode: "0644"
+  notify: reload nginx
+
+- name: Enable the site
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/{{ app_name }}.conf
+    dest: /etc/nginx/sites-enabled/{{ app_name }}.conf
+    state: link
+  notify: reload nginx
+
+- name: Disable the default site
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: reload nginx
+
+- name: Validate Nginx configuration
+  ansible.builtin.command: nginx -t
+  changed_when: false
+
+- name: Ensure Nginx is running and enabled
+  ansible.builtin.sysvinit:
+    name: nginx
+    state: started
+    enabled: true

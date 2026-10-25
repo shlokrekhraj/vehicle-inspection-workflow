@@ -1,0 +1,35 @@
+# ---- Application ----
+app_name: vehicle-inspection
+app_version: "{{ lookup('env', 'APP_VERSION') | default('1.3.0', true) }}"
+app_jar_src: /workspace/target/vehicle-inspection-workflow-0.0.1-SNAPSHOT.jar
+app_user: vehicleapp
+app_group: vehicleapp
+app_home: /opt/vehicle-inspection
+app_conf_dir: /etc/vehicle-inspection
+app_port: 8080
+app_env: ansible
+java_opts: "-Xms128m -Xmx384m"
+
+# ---- Database (separate container on the same Docker network) ----
+db_container: vi-node-db
+db_image: mysql:8.4
+db_name: vehicle_inspection_node
+db_user: root
+db_password: "{{ lookup('env', 'DB_PASSWORD') }}"
+
+# ---- Infrastructure ----
+docker_network: vi-ansible-net
+node_image: ubuntu:22.04
+fresh_node: false              # true = destroy and recreate the node from a clean image
+
+# ---- Packages the node needs ----
+node_packages:
+  - openjdk-17-jre-headless
+  - nginx
+  - curl
+  - ca-certificates
+
+# ---- Health check ----
+health_url: "http://127.0.0.1/actuator/health"
+health_retries: 40
+health_delay: 4

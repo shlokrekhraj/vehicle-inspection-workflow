@@ -9,9 +9,9 @@ All runs on 25 Oct 2026 on the author's Windows 11 PC: Jenkins 2.x at `http://lo
 | 5 | Feature branch + PR | PR #1 `feature/user-registration` | Done |
 | 6 | Functional MVP, merge conflict, tag, backlog | PR #2, conflict fix `9e1822d`, tags `v1.0.0` `v1.1.0`, `docs/step-06-mvp-backlog.md` | Done |
 | 7 | Jenkins CI job, trigger, archived artefact | `step-07/` - `Vehicle-Inspection-CI` build #10 "Started by an SCM change" (8 polling-triggered builds #3-#10), polling log, archived jar | SUCCESS |
-| 8 | Jenkinsfile, pipeline run, deployed app, parameters | `step-08/jenkins-pipeline-build-13-console.log` - branch `ci/pipeline-deploy`, params `DEPLOY_ENV=dev APP_PORT=9090 NGINX_PORT=8088`; app healthy on 9090, Nginx on 8088 | SUCCESS |
+| 8 | Jenkinsfile, pipeline run, deployed app, parameters | `step-08/jenkins-pipeline-build-13-console.log` - commit `c1e35d7` (tag `step-08-jar-pipeline`), params `DEPLOY_ENV=dev APP_PORT=9090 NGINX_PORT=8088`; app healthy on 9090, Nginx on 8088 | SUCCESS |
 | 9 | Test plan, Selenium scripts, local report, failure screenshots | `docs/step-09-test-plan.md`, `src/test/java/.../selenium/`, `step-09/local-selenium-run.log` (local `mvn -Pselenium test`, 25 Oct 2026 15:54: **Tests run: 6, Failures: 0, BUILD SUCCESS**) + per-class reports `step-09/*.txt`, failure screenshots in `step-10/` | SUCCESS |
-| 10 | Jenkins test report, failed pipeline, fix commit, green rerun | `step-10/` - build #18 FAILED (J4/J5 caught the defect, deploy skipped) -> build #19 SUCCESS | Done |
+| 10 | Jenkins test report, failed pipeline, fix commit, green rerun | `step-10/` - build #18 FAILED (commit `0ebabc8`, tag `step-10-defect`) (J4/J5 caught the defect, deploy skipped) -> build #19 SUCCESS | Done |
 | 11 | Dockerfile, image details, command log, running container | `Dockerfile`, `step-11/docker-lifecycle.log` (build -> tag -> inspect -> run 8090:8080 -> healthy -> logs -> stats -> stop -> start -> restart -> rm) | Done |
 | 12 | Versioned image, registry, commit-to-container pipeline | `step-12/jenkins-pipeline-build-19-console.log`, `step-12/registry-tags.json` (`1.2.17`, `1.2.19`, `latest`) | SUCCESS |
 | 13 | Config spec, Ansible playbook, first execution | `docs/step-13-configuration-management.md`, `ansible/`, `step-13-14/01-first-run.log` | SUCCESS |

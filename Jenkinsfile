@@ -1,6 +1,9 @@
-// Vehicle Inspection Workflow - Pipeline as Code (Steps 8 and 10)
-// Checkout -> Build & Unit Test -> Package -> Selenium Test -> Deploy (jar behind Nginx)
-// Any failing API or Selenium test fails its stage, so Deploy never runs on a broken build.
+// Vehicle Inspection Workflow - Commit-to-Container pipeline (Steps 8, 10 and 12)
+//
+// Checkout -> Build & Unit Test -> Package -> Docker Build -> Infrastructure
+//   -> Selenium Test (against the new container) -> Publish Image -> Deploy Container -> Smoke Test
+//
+// Any failing test stops the pipeline before Publish/Deploy, so only tested images ship.
 
 pipeline {
     agent any
@@ -12,11 +15,13 @@ pipeline {
 
     parameters {
         choice(name: 'DEPLOY_ENV', choices: ['dev', 'staging'],
-               description: 'Target environment - selects the database and the deploy folder')
-        string(name: 'APP_PORT', defaultValue: '9090',
-               description: 'Port the deployed application listens on (behind Nginx)')
+               description: 'Target environment - selects container name, database and state file')
+        string(name: 'APP_PORT', defaultValue: '8085',
+               description: 'Host port mapped to the deployed container (direct access)')
         string(name: 'NGINX_PORT', defaultValue: '8088',
                description: 'Public port of the Nginx reverse proxy')
+        string(name: 'REGISTRY', defaultValue: 'localhost:5000',
+               description: 'Registry to publish to (local registry by default)')
     }
 
     options {
@@ -26,22 +31,26 @@ pipeline {
     }
 
     triggers {
-        // Poll GitHub every 5 minutes; a webhook can replace this later.
         pollSCM('H/5 * * * *')
     }
 
     environment {
         JAR_NAME    = 'vehicle-inspection-workflow-0.0.1-SNAPSHOT.jar'
-        APP_VERSION = "1.1.${BUILD_NUMBER}"
-        TEST_PORT   = '8080'
+        IMAGE_NAME  = 'vehicle-inspection-workflow'
+        APP_VERSION = "1.2.${BUILD_NUMBER}"
+        TEST_PORT   = '8091'
         DEPLOY_ROOT = 'C:\\vehicle-inspection-deploy'
+        PS          = 'powershell -NoProfile -ExecutionPolicy Bypass -File'
     }
 
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
-                bat 'git log -1 --pretty="Building commit %%h - %%s (%%an)"'
+                script {
+                    env.GIT_SHORT = bat(script: '@git rev-parse --short HEAD', returnStdout: true).trim()
+                }
+                echo "Building ${APP_VERSION} from commit ${env.GIT_SHORT}"
             }
         }
 
@@ -63,24 +72,35 @@ pipeline {
             }
         }
 
+        stage('Docker Build') {
+            steps {
+                bat """
+                    docker build -t ${IMAGE_NAME}:${APP_VERSION} ^
+                        --build-arg APP_VERSION=${APP_VERSION} --build-arg GIT_COMMIT=${env.GIT_SHORT} .
+                """
+                bat "docker image inspect ${IMAGE_NAME}:${APP_VERSION} --format \"Image {{.Id}} size={{.Size}} labels={{json .Config.Labels}}\""
+            }
+        }
+
+        stage('Infrastructure') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'vehicle-inspection-db',
+                        usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
+                    bat "%PS% deploy\\windows\\ensure-infra.ps1"
+                }
+            }
+        }
+
         stage('Selenium Test') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'vehicle-inspection-db',
                         usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
                     script {
                         try {
-                            bat """
-                                powershell -NoProfile -ExecutionPolicy Bypass -File deploy\\windows\\start-app.ps1 ^
-                                    -Jar "%WORKSPACE%\\target\\${JAR_NAME}" -WorkDir "%WORKSPACE%\\test-run" ^
-                                    -Port ${TEST_PORT} -Environment ci -Version ${APP_VERSION} -DbName vehicle_inspection_ci
-                            """
-                            bat """
-                                powershell -NoProfile -ExecutionPolicy Bypass -File deploy\\windows\\wait-for-health.ps1 ^
-                                    -Url http://localhost:${TEST_PORT}/actuator/health -ErrorLog "%WORKSPACE%\\test-run\\app-error.log"
-                            """
+                            bat "%PS% deploy\\windows\\run-container.ps1 -Image ${IMAGE_NAME}:${APP_VERSION} -Name vi-app-test -Environment ci -DbName vehicle_inspection_ci -HostPort ${TEST_PORT}"
                             bat "mvn -B -Pselenium test -Dapp.baseUrl=http://localhost:${TEST_PORT}"
                         } finally {
-                            bat 'powershell -NoProfile -ExecutionPolicy Bypass -File deploy\\windows\\stop-app.ps1 -WorkDir "%WORKSPACE%\\test-run"'
+                            bat(returnStatus: true, script: 'if not exist test-run mkdir test-run & docker logs vi-app-test > test-run\\app-test-container.log 2>&1 & docker rm -f vi-app-test')
                         }
                     }
                 }
@@ -93,46 +113,50 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            // Quality gate: only deploy when every earlier stage and test passed
-            when {
-                expression { currentBuild.currentResult == 'SUCCESS' }
+        stage('Publish Image') {
+            when { expression { currentBuild.currentResult == 'SUCCESS' } }
+            steps {
+                bat """
+                    docker tag ${IMAGE_NAME}:${APP_VERSION} ${params.REGISTRY}/${IMAGE_NAME}:${APP_VERSION}
+                    docker tag ${IMAGE_NAME}:${APP_VERSION} ${params.REGISTRY}/${IMAGE_NAME}:latest
+                    docker push ${params.REGISTRY}/${IMAGE_NAME}:${APP_VERSION} || exit /b 1
+                    docker push ${params.REGISTRY}/${IMAGE_NAME}:latest || exit /b 1
+                """
+                // Registry evidence: list the tags the registry now holds
+                bat "curl -s http://${params.REGISTRY}/v2/${IMAGE_NAME}/tags/list > registry-tags.json & type registry-tags.json"
+                archiveArtifacts artifacts: 'registry-tags.json', allowEmptyArchive: true
             }
+        }
+
+        stage('Deploy Container') {
+            when { expression { currentBuild.currentResult == 'SUCCESS' } }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'vehicle-inspection-db',
                         usernameVariable: 'DB_USERNAME', passwordVariable: 'DB_PASSWORD')]) {
-                    // dontKillMe: keep the deployed app alive after the build finishes
-                    withEnv(['JENKINS_NODE_COOKIE=dontKillMe', 'BUILD_ID=dontKillMe']) {
-                        bat """
-                            if not exist "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\releases" mkdir "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\releases"
-                            copy /Y "target\\${JAR_NAME}" "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\releases\\vehicle-inspection-${APP_VERSION}.jar" || exit /b 1
-                            powershell -NoProfile -ExecutionPolicy Bypass -File deploy\\windows\\start-app.ps1 ^
-                                -Jar "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\releases\\vehicle-inspection-${APP_VERSION}.jar" ^
-                                -WorkDir "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}" -Port ${params.APP_PORT} ^
-                                -Environment ${params.DEPLOY_ENV} -Version ${APP_VERSION} -DbName vehicle_inspection_${params.DEPLOY_ENV} || exit /b 1
-                        """
-                    }
+                    // Retire the Step 8 jar deployment if it is still running
+                    bat(returnStatus: true, script: "%PS% deploy\\windows\\stop-app.ps1 -WorkDir \"${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\"")
+                    bat "%PS% deploy\\windows\\deploy-container.ps1 -Image ${params.REGISTRY}/${IMAGE_NAME}:${APP_VERSION} -Environment ${params.DEPLOY_ENV} -HostPort ${params.APP_PORT} -StateDir ${DEPLOY_ROOT}"
                 }
-                bat """
-                    powershell -NoProfile -ExecutionPolicy Bypass -File deploy\\windows\\wait-for-health.ps1 ^
-                        -Url http://localhost:${params.APP_PORT}/actuator/health -ErrorLog "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\app-error.log" || exit /b 1
-                    powershell -NoProfile -ExecutionPolicy Bypass -File deploy\\windows\\deploy-nginx.ps1 ^
-                        -Upstream host.docker.internal:${params.APP_PORT} -ConfigDir "${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\nginx" ^
-                        -Port ${params.NGINX_PORT} -Name vi-nginx-${params.DEPLOY_ENV} || exit /b 1
-                    powershell -NoProfile -ExecutionPolicy Bypass -File deploy\\windows\\wait-for-health.ps1 ^
-                        -Url http://localhost:${params.NGINX_PORT}/actuator/health -TimeoutSeconds 60
-                """
-                echo "Deployed ${APP_VERSION} to ${params.DEPLOY_ENV}: http://localhost:${params.NGINX_PORT}/"
+                bat "%PS% deploy\\windows\\deploy-nginx.ps1 -Upstream vi-app-${params.DEPLOY_ENV}:8080 -Network vi-net -ConfigDir \"${DEPLOY_ROOT}\\${params.DEPLOY_ENV}\\nginx\" -Port ${params.NGINX_PORT} -Name vi-nginx-${params.DEPLOY_ENV}"
+            }
+        }
+
+        stage('Smoke Test') {
+            when { expression { currentBuild.currentResult == 'SUCCESS' } }
+            steps {
+                bat "%PS% deploy\\windows\\wait-for-health.ps1 -Url http://localhost:${params.NGINX_PORT}/actuator/health -TimeoutSeconds 90"
+                bat "curl -s http://localhost:${params.NGINX_PORT}/actuator/info"
+                bat "docker ps --filter name=vi- --format \"table {{.Names}}\\t{{.Image}}\\t{{.Status}}\\t{{.Ports}}\""
             }
         }
     }
 
     post {
         success {
-            echo "Pipeline succeeded - application available at http://localhost:${params.NGINX_PORT}/"
+            echo "Deployed ${params.REGISTRY}/${IMAGE_NAME}:${APP_VERSION} to ${params.DEPLOY_ENV} - http://localhost:${params.NGINX_PORT}/"
         }
         failure {
-            echo 'Pipeline failed - deployment was skipped. Check the stage logs and test reports.'
+            echo 'Pipeline failed - nothing was published or deployed. Check stage logs and test reports.'
         }
     }
 }

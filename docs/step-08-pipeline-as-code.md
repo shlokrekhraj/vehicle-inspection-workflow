@@ -2,7 +2,7 @@
 
 Pipeline job `Vehicle-Inspection-Pipeline` reads `Jenkinsfile` from the repository (Pipeline script from SCM).
 
-## Stages (branch `ci/pipeline-deploy`)
+## Stages (tag `step-08-jar-pipeline`)
 
 `Checkout -> Build & Unit Test -> Package -> Selenium Test -> Deploy`
 
@@ -24,6 +24,6 @@ Pipeline job `Vehicle-Inspection-Pipeline` reads `Jenkinsfile` from the reposito
 
 ## Evidence
 
-Build **#13** - SUCCESS, 25 Oct 2026 15:09, commit `c1e35d7`, parameters `DEPLOY_ENV=dev APP_PORT=9090 NGINX_PORT=8088`: `docs/evidence/step-08/jenkins-pipeline-build-13-console.log` (ends with `Health check passed: http://localhost:8088/actuator/health -> UP`).
+Build **#13** - SUCCESS, 25 Oct 2026 15:09, commit `c1e35d7` (built from branch `ci/pipeline-deploy`, preserved as tag **`step-08-jar-pipeline`**), parameters `DEPLOY_ENV=dev APP_PORT=9090 NGINX_PORT=8088`: `docs/evidence/step-08/jenkins-pipeline-build-13-console.log` (ends with `Health check passed: http://localhost:8088/actuator/health -> UP`).
 
 From Step 12 onward the same Jenkinsfile on `develop` deploys a Docker container instead of the jar; Nginx stays the entry point on port 8088.

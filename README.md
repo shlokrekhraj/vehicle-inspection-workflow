@@ -68,6 +68,26 @@ Applicant → Submit Request → Validate → Reviewer Review → Approve/Reject
 - hotfix/<issue-name>
 - release/<version>
 
+## Branches, Pull Requests and Tags
+
+Work was done on short-lived branches (`feature/`, `ci/`, `test/`, `docker/`, `cd/`, `config/`, `bugfix/`, `release/`), merged into `develop`, and released to `main` with a pull request. Merged branches were then deleted; their history lives on in the merge commits and pull requests.
+
+| Pull request | Merge |
+|--------------|-------|
+| #1 | `feature/user-registration` -> `main` |
+| #2 | `feature/inspection-workflow` -> `develop` (README merge conflict resolved) |
+| #3 | `release/v1.4.0` -> `main` (release of Steps 6-14) |
+
+| Tag | Points to |
+|-----|-----------|
+| `v1.0.0` | First MVP baseline |
+| `v1.1.0` | Complete 15-task MVP |
+| `v1.2.0` | Containerized commit-to-container pipeline |
+| `v1.3.0` | Ansible provisioning, idempotency and rollback |
+| `v1.4.0` | Final release on `main` |
+| `step-08-jar-pipeline` | Step 8 pipeline (jar deploy behind Nginx) - Jenkins build #13 |
+| `step-10-defect` | Deliberate defect for Step 10 - Jenkins build #18 (failed, deploy skipped). Intentionally never merged. |
+
 ## Commit Convention
 
 Examples:

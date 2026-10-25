@@ -16,8 +16,9 @@ try {
     Write-Host "> $cmd"
     if ($LogFile) {
         New-Item -ItemType Directory -Force -Path (Split-Path $LogFile) | Out-Null
-        "> $cmd`n" | Set-Content $LogFile
-        cmd /c "$cmd 2>&1" | Tee-Object -FilePath $LogFile -Append
+        # Write UTF-8 explicitly - Tee-Object in Windows PowerShell 5 writes UTF-16
+        "> $cmd" | Set-Content -Path $LogFile -Encoding UTF8
+        cmd /c "$cmd 2>&1" | ForEach-Object { Write-Host $_; Add-Content -Path $LogFile -Value $_ -Encoding UTF8 }
     } else {
         cmd /c "$cmd 2>&1"
     }

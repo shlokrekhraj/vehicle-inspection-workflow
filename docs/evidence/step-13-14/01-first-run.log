@@ -1,0 +1,122 @@
+> docker compose -f ansible/docker-compose.yml run --rm -T -e ANSIBLE_FORCE_COLOR=0 ansible ansible-playbook playbooks/site.yml -e fresh_node=true
+
+ Container ansible-ansible-run-ecde1dffdcd3 Creating 
+ Container ansible-ansible-run-ecde1dffdcd3 Created 
+
+PLAY [Provision infrastructure (network, database, clean target node)] *********
+
+TASK [provision : Create the Docker network for the environment] ***************
+ok: [localhost]
+
+TASK [provision : Run the MySQL database container] ****************************
+ok: [localhost]
+
+TASK [provision : Wait until MySQL accepts TCP connections] ********************
+ok: [localhost]
+
+TASK [provision : Provision the target node from a clean image (ubuntu:22.04)] ***
+changed: [localhost] => (item=vi-node1)
+
+PLAY [Configure target node prerequisites] *************************************
+
+TASK [bootstrap : Install Python on the node if it is missing] *****************
+changed: [vi-node1]
+
+TASK [bootstrap : Gather facts] ************************************************
+ok: [vi-node1]
+
+TASK [common : Install required packages] **************************************
+changed: [vi-node1]
+
+TASK [common : Create application group] ***************************************
+changed: [vi-node1]
+
+TASK [common : Create application user (no login shell)] ***********************
+changed: [vi-node1]
+
+TASK [common : Create application folders] *************************************
+changed: [vi-node1] => (item={'path': '/opt/vehicle-inspection', 'owner': 'root', 'mode': '0755'})
+changed: [vi-node1] => (item={'path': '/opt/vehicle-inspection/releases', 'owner': 'root', 'mode': '0755'})
+changed: [vi-node1] => (item={'path': '/opt/vehicle-inspection/logs', 'owner': 'vehicleapp', 'mode': '0750'})
+changed: [vi-node1] => (item={'path': '/etc/vehicle-inspection', 'owner': 'root', 'mode': '0750'})
+
+TASK [common : Write application environment file] *****************************
+changed: [vi-node1]
+
+TASK [common : Install the application service script] *************************
+changed: [vi-node1]
+
+TASK [common : Enable the application service at boot] *************************
+changed: [vi-node1]
+
+TASK [nginx : Configure Nginx as reverse proxy for the app (port 80 -> 8080)] ***
+changed: [vi-node1]
+
+TASK [nginx : Enable the site] *************************************************
+changed: [vi-node1]
+
+TASK [nginx : Disable the default site] ****************************************
+changed: [vi-node1]
+
+TASK [nginx : Validate Nginx configuration] ************************************
+ok: [vi-node1]
+
+TASK [nginx : Ensure Nginx is running and enabled] *****************************
+changed: [vi-node1]
+
+RUNNING HANDLER [common : Check whether a release is deployed] *****************
+ok: [vi-node1]
+
+RUNNING HANDLER [nginx : reload nginx] *****************************************
+changed: [vi-node1]
+
+PLAY [Deploy the application (automatic rollback on failed health check)] ******
+
+TASK [app : Work out release paths] ********************************************
+ok: [vi-node1]
+
+TASK [app : Read the currently deployed release] *******************************
+ok: [vi-node1]
+
+TASK [app : Remember which release was live before this run] *******************
+ok: [vi-node1]
+
+TASK [app : Create release folder 1.3.4] ***************************************
+changed: [vi-node1]
+
+TASK [app : Copy application jar] **********************************************
+changed: [vi-node1]
+
+TASK [app : Point 'current' at the new release] ********************************
+changed: [vi-node1]
+
+TASK [app : Restart the application for the new release] ***********************
+changed: [vi-node1]
+
+TASK [app : Ensure the application is running] *********************************
+ok: [vi-node1]
+
+TASK [Health check new release] ************************************************
+included: verify for vi-node1
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (40 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (39 retries left).
+
+TASK [verify : Wait for /actuator/health through Nginx to report UP] ***********
+ok: [vi-node1]
+
+TASK [verify : Read deployed version] ******************************************
+ok: [vi-node1]
+
+TASK [verify : Health check result] ********************************************
+ok: [vi-node1] => 
+    msg:
+    - 'Node:      vi-node1'
+    - 'Release:   1.3.4'
+    - 'Health:    UP'
+    - 'Database:  UP'
+    - 'URL on PC: http://localhost:8095/'
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=4    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+vi-node1                   : ok=28   changed=17   unreachable=0    failed=0    skipped=3    rescued=0    ignored=0   
+

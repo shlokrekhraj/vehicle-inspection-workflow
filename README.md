@@ -129,12 +129,14 @@ mvn spring-boot:run
 | Step | Deliverable | Location |
 |------|-------------|----------|
 | 6 | MVP completion and updated backlog | `docs/step-06-mvp-backlog.md` |
-| 7 | Jenkins CI job (`Vehicle-Inspection-CI`, SCM polling, archived jar) | Jenkins |
-| 8 | Pipeline as code with Nginx deploy | `Jenkinsfile`, `deploy/` |
+| 7 | Jenkins CI job (`Vehicle-Inspection-CI`, SCM polling, archived jar) | `docs/step-07-jenkins-ci.md` |
+| 8 | Pipeline as code with Nginx deploy | `Jenkinsfile`, `deploy/`, `docs/step-08-pipeline-as-code.md` |
 | 9 | Selenium test plan and suite | `docs/step-09-test-plan.md`, `src/test/java/.../selenium` |
 | 10 | Continuous testing and deploy gate | `docs/step-10-continuous-testing.md` |
 | 11 | Docker image and lifecycle | `Dockerfile`, `docker/`, `docs/step-11-docker.md` |
 | 12 | Jenkins-Docker continuous deployment | `Jenkinsfile`, `docs/step-12-continuous-deployment.md` |
 | 13 | Ansible configuration management | `ansible/`, `docs/step-13-configuration-management.md` |
 | 14 | Provisioning, idempotency, health, rollback | `Jenkinsfile.provision`, `docs/step-14-provisioning-reliability.md` |
+
+All run logs, reports and screenshots: [`docs/evidence/README.md`](docs/evidence/README.md)
 

@@ -36,12 +36,12 @@ screenshots/
 *.temp
 
 # Evidence logs are deliverables - keep them
-!docs/evidence/*.log
+!docs/evidence/**
 
 # Pipeline / Ansible run output
 test-run/
 ansible-logs/
-registry-tags.json
+/registry-tags.json
 
 # Editor leftovers
 *.java.txt

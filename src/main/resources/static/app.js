@@ -11,7 +11,10 @@ async function api(method, url, body) {
   let data = null;
   try { data = text ? JSON.parse(text) : null; } catch (e) { data = text; }
   if (!response.ok) {
-    const detail = data && data.errors && data.errors.length ? "\n- " + data.errors.join("\n- ") : "";
+    const errors = (data && data.errors) || [];
+    // don't repeat the message when the only error says the same thing
+    const extra = errors.filter(e => e !== (data && data.message));
+    const detail = extra.length ? "\n- " + extra.join("\n- ") : "";
     const error = new Error(((data && data.message) || ("HTTP " + response.status)) + detail);
     error.status = response.status;
     throw error;

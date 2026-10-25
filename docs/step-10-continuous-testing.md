@@ -16,9 +16,11 @@ Checkout -> Build & Unit Test -> Package -> Selenium Test -> Deploy
 
 ## Deliberate defect exercise
 
-| Build | Commit | What happened |
-|-------|--------|---------------|
-| _fill in_ | `test: introduce deliberate defect in reviewer approve button` | Reviewer page sends `decision=APPROVED` instead of `APPROVE`. API tests still pass; Selenium J4 fails; Deploy skipped; screenshot archived. |
-| _fill in_ | `fix: send APPROVE decision from reviewer dashboard` | Defect corrected; all tests pass; Deploy runs. |
+| Build | Branch / commit | Result | What happened |
+|-------|-----------------|--------|---------------|
+| **#18** (25 Oct 2026, 15:34) | `demo/step10-defect` @ `0ebabc8` - *test: introduce deliberate defect in reviewer decision buttons* | **FAILURE** | Reviewer page sends `APPROVED`/`REJECTED` instead of `APPROVE`/`REJECT`. All 6 API tests and 4 of 6 Selenium tests passed; **J4 `reviewerApprovesRequest` and J5 `reviewerRejectsRequestWithRemarks` failed** with "Decision must be APPROVE or REJECT". `Publish Image` and `Deploy Container` were **skipped**, so nothing broken was released. Screenshots of both failing pages archived. |
+| **#19** (25 Oct 2026, 15:37) | `develop` @ `243e5ae` (contains fix commit `69a8be7` - *fix: send APPROVE/REJECT decision from reviewer dashboard*) | **SUCCESS** | 12/12 tests passed; image `1.2.19` published and deployed. |
 
-Evidence: Jenkins test result trend, the failed build's console + screenshot artifact, and the green rerun.
+Evidence: `docs/evidence/step-10/` - failed build console log and the two failure screenshots captured automatically by `ScreenshotOnFailureExtension`. The green rerun is `docs/evidence/step-12/jenkins-pipeline-build-19-console.log`.
+
+The registry holds `1.2.17` and `1.2.19` but **no `1.2.18`** - the defective build was never published.

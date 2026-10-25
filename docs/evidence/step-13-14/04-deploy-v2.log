@@ -1,0 +1,57 @@
+> docker compose -f ansible/docker-compose.yml run --rm -T -e ANSIBLE_FORCE_COLOR=0 ansible ansible-playbook playbooks/deploy.yml 
+
+ Container ansible-ansible-run-a101f099e1f8 Creating 
+ Container ansible-ansible-run-a101f099e1f8 Created 
+
+PLAY [Deploy the application (automatic rollback on failed health check)] ******
+
+TASK [app : Work out release paths] ********************************************
+ok: [vi-node1]
+
+TASK [app : Read the currently deployed release] *******************************
+ok: [vi-node1]
+
+TASK [app : Remember which release was live before this run] *******************
+ok: [vi-node1]
+
+TASK [app : Create release folder 1.3.4-hotfix] ********************************
+changed: [vi-node1]
+
+TASK [app : Copy application jar] **********************************************
+changed: [vi-node1]
+
+TASK [app : Record the previous release for rollback] **************************
+changed: [vi-node1]
+
+TASK [app : Point 'current' at the new release] ********************************
+changed: [vi-node1]
+
+TASK [app : Restart the application for the new release] ***********************
+changed: [vi-node1]
+
+TASK [app : Ensure the application is running] *********************************
+ok: [vi-node1]
+
+TASK [Health check new release] ************************************************
+included: verify for vi-node1
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (40 retries left).
+FAILED - RETRYING: [vi-node1]: Wait for /actuator/health through Nginx to report UP (39 retries left).
+
+TASK [verify : Wait for /actuator/health through Nginx to report UP] ***********
+ok: [vi-node1]
+
+TASK [verify : Read deployed version] ******************************************
+ok: [vi-node1]
+
+TASK [verify : Health check result] ********************************************
+ok: [vi-node1] => 
+    msg:
+    - 'Node:      vi-node1'
+    - 'Release:   1.3.4-hotfix'
+    - 'Health:    UP'
+    - 'Database:  UP'
+    - 'URL on PC: http://localhost:8095/'
+
+PLAY RECAP *********************************************************************
+vi-node1                   : ok=13   changed=5    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+
